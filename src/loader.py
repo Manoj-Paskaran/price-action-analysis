@@ -6,6 +6,15 @@ import yfinance as yf
 from .constants import MONTHS
 
 
+#DATA_FOLDER = (Whaever the path would be)
+
+@st.cache_data(ttl=60 * 60)
+def load_stock_metadata() -> pd.DataFrame:
+    all_files = list(DATA_FOLDER.glob("*.csv"))
+    df_list = [pd.read_csv(file) for file in all_files]
+    combined_df = pd.concat(df_list, ignore_index=True)
+    return combined_df
+
 @st.cache_data(ttl=60 * 60 * 24)
 def download_stock_data(stock: str) -> pd.Series:
     stock_data = yf.download(
