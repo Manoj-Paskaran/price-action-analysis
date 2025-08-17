@@ -27,18 +27,19 @@ MONTHS = [
 #     "OBEROIRLTY.NS",
 # ]
 
+
 STOCKS = {
-    "Nifty Realty": "^CNXREALTY",
-    "Anant Raj": "ANANTRAJ.NS",
-    "Brigade Enterprises": "BRIGADE.NS",
-    "DLF": "DLF.NS",
-    "Sobha": "SOBHA.NS",
-    "Raymond": "RAYMOND.NS",
-    "Phoenix Mills": "PHOENIXLTD.NS",
-    "Prestige Estates Projects": "PRESTIGE.NS",
-    "Lodha Developers": "LODHA.NS",
-    "Godrej Properties": "GODREJPROP.NS",
-    "Oberoi Realty": "OBEROIRLTY.NS",
+    "Nifty Media": "^CNXMEDIA",
+    "Network18": "NETWORK18.NS",
+    "Hathway": "HATHWAY.NS",
+    "Dish TV": "DISHTV.NS",
+    "Sun TV": "SUNTV.NS",
+    "PVR Inox": "PVRINOX.NS",
+    "Nazara": "NAZARA.NS",
+    "Tips Music": "TIPSMUSIC.NS",
+    "Zee Entertainment": "ZEEL.NS",
+    "DB Corp": "DBCORP.NS",
+    "Saregama": "SAREGAMA.NS",
 }
 
 STOCK_TICKERS = list(STOCKS.values())
