@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -5,15 +7,24 @@ import yfinance as yf
 
 from .constants import MONTHS
 
+STOCK_DATA_DIR = Path(__file__).parent.joinpath(Path("../data/stocks"))
 
-#DATA_FOLDER = (Whaever the path would be)
 
 @st.cache_data(ttl=60 * 60)
 def load_stock_metadata() -> pd.DataFrame:
-    all_files = list(DATA_FOLDER.glob("*.csv"))
+    all_files = list(STOCK_DATA_DIR.glob("*"))
     df_list = [pd.read_csv(file) for file in all_files]
     combined_df = pd.concat(df_list, ignore_index=True)
-    return combined_df
+
+    return combined_df.rename(
+        columns={
+            "Symbol": "symbol",
+            "Sector": "sector",
+            "Company Name": "company_name",
+            "Industry": "industry",
+        }
+    ).assign(symbol=lambda df_: df_["symbol"].add(".NS"))
+
 
 @st.cache_data(ttl=60 * 60 * 24)
 def download_closing_data(ticker: str) -> pd.Series:
@@ -68,6 +79,7 @@ def get_monthly_analysis(
         .pivot_table(
             index="year", columns="month", values="monthly_returns", observed=True
         )
+        .reindex(columns=MONTHS)
         .assign(
             annual_returns=lambda df_: df_.loc[:, "Jan":"Dec"].agg(
                 calc_annual_return, axis=1
@@ -107,10 +119,7 @@ def format_analysis(analysis: pd.DataFrame):
         .round(2)
     )
 
-# TODO: Implement this function
-#       I suggest using the Path library and pd.read_csv to do this
-#       Remember to only read files ending in .csv
-def load_stocks_from_data_dir(dir: str) -> pd.DataFrame:
-    """
-    Read all csv files from ../data/stocks and return a concatenated DataFrame
-    """
+
+if __name__ == "__main__":
+    stock_df = load_stock_metadata()
+    print(stock_df)

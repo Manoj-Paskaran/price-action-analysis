@@ -3,28 +3,34 @@ import streamlit as st
 from src.loader import (
     format_analysis,
     get_monthly_analysis,
-    load_stock_metadata
-
+    load_stock_metadata,
 )
 from src.plots import (
     generate_heatmap,
     generate_monthly_avg_barchart,
 )
 
-stock_df = load_stock_metadata()
-
 st.set_page_config(page_title="Price Action Dashboard", layout="wide")  # make page wide
 
-selected_sector = st.sidebar.selectbox("Choose a sector:", sorted(stock_df['Sector'].unique()))
-filtered_df = stock_df[stock_df['Sector'] == selected_sector]
+stock_df = load_stock_metadata()
 
-selected_stock_name = st.sidebar.selectbox("Choose a stock:", filtered_df['Company Name'])
-selected_stock_ticker = filtered_df.loc[filtered_df['Company Name'] == selected_stock_name, 'Symbol'].values[0]
+selected_sector = st.sidebar.selectbox(
+    "Choose a sector:", sorted(stock_df["sector"].dropna().unique()), index=1
+)
+filtered_df = stock_df[stock_df["sector"] == selected_sector]
+
+selected_stock_name = st.sidebar.selectbox(
+    "Choose a stock:", filtered_df["company_name"]
+)
+selected_stock_ticker = filtered_df.loc[
+    filtered_df["company_name"] == selected_stock_name, "symbol"
+].values[0]  # type: ignore
+
 
 st.title("Price Action Dashboard")
-st.write(f"### Selected Stock: **{selected_stock_ticker}**")
+st.write(f"### Selected Stock: **{selected_stock_name}** `{selected_stock_ticker}`")
 
-tab1, tab2, tab3 = st.tabs(["📄 Price Action Data", "🔥 Heatmap", "📊 Bar Charts"])
+tab1, tab2, tab3 = st.tabs(["📄 Price Action Data", "🔥 Heatmap", "📊 Bar Chart"])
 
 
 @st.cache_data(ttl=60 * 60)
