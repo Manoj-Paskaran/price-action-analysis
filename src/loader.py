@@ -16,15 +16,15 @@ def load_stock_metadata() -> pd.DataFrame:
     return combined_df
 
 @st.cache_data(ttl=60 * 60 * 24)
-def download_stock_data(stock: str) -> pd.Series:
-    stock_data = yf.download(
-        stock,
+def download_closing_data(ticker: str) -> pd.Series:
+    closing_data = yf.download(
+        ticker,
         period="max",
         multi_level_index=False,
         auto_adjust=True,
     )["Close"]  # type: ignore
 
-    return stock_data
+    return closing_data
 
 
 def calc_annual_return(monthly_returns: pd.Series):
@@ -50,10 +50,10 @@ def add_avg_monthly_return(df: pd.DataFrame):
 
 @st.cache_data(ttl=60 * 60)
 def get_monthly_analysis(
-    stock: str, stock_data: pd.Series | None = None
+    ticker: str, stock_data: pd.Series | None = None
 ) -> pd.DataFrame:
     if stock_data is None:
-        stock_data = download_stock_data(stock)
+        stock_data = download_closing_data(ticker)
 
     return (
         stock_data.to_frame("close")
@@ -107,3 +107,10 @@ def format_analysis(analysis: pd.DataFrame):
         .round(2)
     )
 
+# TODO: Implement this function
+#       I suggest using the Path library and pd.read_csv to do this
+#       Remember to only read files ending in .csv
+def load_stocks_from_data_dir(dir: str) -> pd.DataFrame:
+    """
+    Read all csv files from ../data/stocks and return a concatenated DataFrame
+    """

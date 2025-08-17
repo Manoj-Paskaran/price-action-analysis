@@ -3,17 +3,17 @@ import plotly.express as px
 
 from .constants import MONTHS
 from .loader import (
-    download_stock_data,
+    download_closing_data,
     get_monthly_analysis,
 )
 
 
-def generate_heatmap(stock: str, stock_data: pd.Series | None = None):
-    if stock_data is None:
-        stock_data = download_stock_data(stock)
+def generate_heatmap(ticker: str, closing_data: pd.Series | None = None):
+    if closing_data is None:
+        closing_data = download_closing_data(ticker)
 
     res = (
-        stock_data.to_frame("close")
+        closing_data.to_frame("close")
         .resample("ME")
         .last()
         .assign(
@@ -40,18 +40,18 @@ def generate_heatmap(stock: str, stock_data: pd.Series | None = None):
     fig.update_xaxes(title="")
     fig.update_yaxes(title="Year")
     fig.update_layout(
-        title=f"Historical Monthly Returns of {stock}",
+        title=f"Historical Monthly Returns of {ticker}",
         coloraxis_colorbar_ticksuffix="%",
     )
     return fig
 
 
-def generate_monthly_avg_barchart(stock: str, stock_data: pd.Series | None = None):
-    if stock_data is None:
-        stock_data = download_stock_data(stock)
+def generate_monthly_avg_barchart(ticker: str, closing_data: pd.Series | None = None):
+    if closing_data is None:
+        closing_data = download_closing_data(ticker)
 
     res = (
-        get_monthly_analysis(stock, stock_data)
+        get_monthly_analysis(ticker, closing_data)
         .mul(100)
         .round(2)
         .loc["monthly_avg", MONTHS]
@@ -62,7 +62,7 @@ def generate_monthly_avg_barchart(stock: str, stock_data: pd.Series | None = Non
         x=res.index,
         y=res.values,
         labels={"x": "Month", "y": "Avg Monthly Returns (%)"},
-        title=f"Average Monthly Returns for {stock}",
+        title=f"Average Monthly Returns for {ticker}",
         color=res.values,
         color_continuous_scale="RdYlGn",
         text=res.apply(lambda x: f"{x:.2f}%"),
