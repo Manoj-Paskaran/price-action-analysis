@@ -1,8 +1,5 @@
 import streamlit as st
 
-# TODO: Instead of importing python constants, we need to get the concatanated
-#       dataframe from the load_stocks_from_data_dir function in loader.py
-from src.constants import STOCK_NAMES, STOCKS
 from src.loader import (
     format_analysis,
     get_monthly_analysis,
@@ -12,11 +9,9 @@ from src.plots import (
     generate_monthly_avg_barchart,
 )
 
-st.set_page_config(page_title="Price Action Dashboard", layout="wide")  # make page wide
-
+st.set_page_config(page_title="Price Action Dashboard", layout="wide")
 
 # TODO: Add another sidebar for filtering based on sector
-
 
 # TODO: Change the below code to show stock names of selected sector only
 
@@ -25,7 +20,7 @@ selected_stock_name = st.sidebar.selectbox("Choose a stock:", STOCK_NAMES)
 selected_stock_ticker = STOCKS[selected_stock_name]
 
 st.title("Price Action Dashboard")
-st.write(f"### Selected Stock: **{selected_stock_name}** `({selected_stock_ticker})`")
+st.write(f"### Selected Stock: **{selected_stock_ticker}**")
 
 tab1, tab2, tab3 = st.tabs(["📄 Price Action Data", "🔥 Heatmap", "📊 Bar Charts"])
 
@@ -40,18 +35,14 @@ with tab1:
     analysis = get_formatted_table(selected_stock_ticker)
     st.dataframe(analysis)
 
-
 with tab2:
     st.subheader("Heatmap")
     fig = generate_heatmap(selected_stock_ticker)
     fig.update_layout(
         height=600,
         font=dict(size=16),
-        # margin=dict(l=40, r=20, t=80, b=40)
     )
-    st.plotly_chart(
-        fig,
-    )
+    st.plotly_chart(fig)
 
 with tab3:
     st.subheader("Bar Chart")
