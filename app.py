@@ -3,21 +3,23 @@ import streamlit as st
 from src.loader import (
     format_analysis,
     get_monthly_analysis,
+    load_stock_metadata
+
 )
 from src.plots import (
     generate_heatmap,
     generate_monthly_avg_barchart,
 )
 
-st.set_page_config(page_title="Price Action Dashboard", layout="wide")
+stock_df = load_stock_metadata()
 
-# TODO: Add another sidebar for filtering based on sector
+st.set_page_config(page_title="Price Action Dashboard", layout="wide")  # make page wide
 
-# TODO: Change the below code to show stock names of selected sector only
+selected_sector = st.sidebar.selectbox("Choose a sector:", sorted(stock_df['Sector'].unique()))
+filtered_df = stock_df[stock_df['Sector'] == selected_sector]
 
-st.sidebar.title("Select Stock")
-selected_stock_name = st.sidebar.selectbox("Choose a stock:", STOCK_NAMES)
-selected_stock_ticker = STOCKS[selected_stock_name]
+selected_stock_name = st.sidebar.selectbox("Choose a stock:", filtered_df['Company Name'])
+selected_stock_ticker = filtered_df.loc[filtered_df['Company Name'] == selected_stock_name, 'Symbol'].values[0]
 
 st.title("Price Action Dashboard")
 st.write(f"### Selected Stock: **{selected_stock_ticker}**")
