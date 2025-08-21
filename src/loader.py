@@ -1,6 +1,5 @@
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import streamlit as st
 import yfinance as yf
@@ -42,16 +41,6 @@ def calc_annual_return(monthly_returns: pd.Series):
     return monthly_returns.add(1, fill_value=0.0).prod() - 1.0  # type: ignore
 
 
-def add_monthly_contributions(df: pd.DataFrame):
-    def get_monthly_contrib(monthly_series: pd.Series):
-        return np.log1p(monthly_series[MONTHS]) / np.log1p(
-            monthly_series["annual_returns"]
-        )
-
-    contrib = df.apply(get_monthly_contrib, axis=1).add_suffix("_contrib")
-    return df.join(contrib)
-
-
 def add_avg_monthly_return(df: pd.DataFrame):
     avg_monthly_returns = (
         df[MONTHS].mean(axis=0).rename("monthly_avg").to_frame().transpose()
@@ -87,7 +76,6 @@ def get_monthly_analysis(
             first_half_avg=lambda df_: df_.loc[:, "Jan":"Jun"].mean(axis=1),
             second_half_avg=lambda df_: df_.loc[:, "Jul":"Dec"].mean(axis=1),
         )
-        .pipe(add_monthly_contributions)
         .pipe(add_avg_monthly_return)
     )
 
@@ -101,7 +89,6 @@ def format_analysis(analysis: pd.DataFrame):
                 *MONTHS[6:],
                 "second_half_avg",
                 "annual_returns",
-                *[f"{month}_contrib" for month in MONTHS],
             ]
         ]
         .rename(
@@ -109,7 +96,6 @@ def format_analysis(analysis: pd.DataFrame):
                 "annual_returns": "Total Annual Returns",
                 "first_half_avg": "Avg returns till June",
                 "second_half_avg": "Avg returns after June",
-                **{f"{month}_contrib": f"{month} Contribution" for month in MONTHS},
             },
             index={
                 "monthly_avg": "Avg Monthly Returns",
