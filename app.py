@@ -1,3 +1,6 @@
+import io
+
+import pandas as pd
 import streamlit as st
 
 from src.loader import (
@@ -38,10 +41,38 @@ def get_formatted_table(stock: str):
     return format_analysis(get_monthly_analysis(stock))
 
 
+@st.cache_data
+def df_to_csv_bytes(df: pd.DataFrame) -> bytes:
+    return df.to_csv(index=True).encode("utf-8")
+
+
+@st.cache_data
+def df_to_excel_bytes(df: pd.DataFrame) -> bytes:
+    buf = io.BytesIO()
+    with pd.ExcelWriter(buf, engine="xlsxwriter") as writer:
+        df.to_excel(writer, sheet_name="Analysis", index=True)
+    return buf.getvalue()
+
+
 with tab1:
     st.subheader("Price Action DataFrame")
     analysis = get_formatted_table(selected_stock_ticker)
     st.dataframe(analysis)
+
+    st.download_button(
+        "Download CSV",
+        data=df_to_csv_bytes(analysis),
+        file_name=f"{selected_stock_ticker}_analysis.csv",
+        mime="text/csv",
+        icon=":material/download:",
+    )
+    st.download_button(
+        "Download Excel",
+        data=df_to_excel_bytes(analysis),
+        file_name=f"{selected_stock_ticker}_analysis.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        icon=":material/download:",
+    )
 
 with tab2:
     st.subheader("Heatmap")
