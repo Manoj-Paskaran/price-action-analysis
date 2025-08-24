@@ -6,23 +6,14 @@ import yfinance as yf
 
 from .constants import MONTHS
 
-STOCK_DATA_DIR = Path(__file__).parent.joinpath(Path("../data/stocks"))
+DATA_DIR = Path(__file__).parent.joinpath(Path("../data/"))
 
 
 @st.cache_data(ttl=60 * 60)
 def load_stock_metadata() -> pd.DataFrame:
-    all_files = list(STOCK_DATA_DIR.glob("*"))
-    df_list = [pd.read_csv(file) for file in all_files]
-    combined_df = pd.concat(df_list, ignore_index=True)
-
-    return combined_df.rename(
-        columns={
-            "Symbol": "symbol",
-            "Sector": "sector",
-            "Company Name": "company_name",
-            "Industry": "industry",
-        }
-    ).assign(symbol=lambda df_: df_["symbol"].add(".NS"))
+    return pd.read_parquet(
+        DATA_DIR.joinpath("combined.parquet"), engine="pyarrow", dtype_backend="pyarrow"
+    )
 
 
 @st.cache_data(ttl=60 * 60 * 24)
@@ -104,8 +95,3 @@ def format_analysis(analysis: pd.DataFrame):
         .mul(100)
         .round(2)
     )
-
-
-if __name__ == "__main__":
-    stock_df = load_stock_metadata()
-    print(stock_df)
