@@ -1,10 +1,12 @@
 # 📈 Price Action Analysis Dashboard
 
-A **Streamlit** web application for analyzing the **price action** of multiple stocks and indices from inception until August 2025.  
+A **Streamlit** web application for analyzing the **price action** of multiple stocks and indices from inception.  
 The dashboard allows interactive exploration of:
 - Price action data (monthly closing prices, returns, and metrics)
 - Seasonal patterns and monthly performance heatmaps
 - Annual returns and contribution analysis
+
+Link to website: https://price-action-analysis.streamlit.app/
 
 ---
 
