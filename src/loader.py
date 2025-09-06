@@ -1,3 +1,6 @@
+import asyncio
+import io
+import re
 from pathlib import Path
 
 import pandas as pd
@@ -7,6 +10,14 @@ import yfinance as yf
 from .constants import MONTHS
 
 DATA_DIR = Path(__file__).parent.joinpath(Path("../data/"))
+
+
+def get_cache_path_for_sector(sector: str) -> Path:
+    sector_dir = DATA_DIR / "sector-analysis"
+    sector_dir.mkdir(parents=True, exist_ok=True)
+    safe_sector_name = re.sub(r"[^A-Za-z0-9_-]+", "_", sector.strip())
+
+    return sector_dir / f"{safe_sector_name}.parquet"
 
 
 @st.cache_data(ttl=60 * 60)
@@ -41,7 +52,8 @@ def add_avg_monthly_return(df: pd.DataFrame):
 
 @st.cache_data(ttl=60 * 60)
 def get_monthly_analysis(
-    ticker: str, stock_data: pd.Series | None = None
+    ticker: str,
+    stock_data: pd.Series | None = None,
 ) -> pd.DataFrame:
     if stock_data is None:
         stock_data = download_closing_data(ticker)
@@ -60,20 +72,135 @@ def get_monthly_analysis(
             index="year", columns="month", values="monthly_returns", observed=True
         )
         .reindex(columns=MONTHS)
-        .assign(
+    )
+
+
+def get_sector_monthly_analysis(
+    sector: str,
+    stock_df: pd.DataFrame | None = None,
+    use_cache: bool = True,
+    force_refresh: bool = False,
+    max_concurrency: int = 8,
+) -> pd.DataFrame:  # type: ignore
+    """Aggregate monthly returns for all symbols in a given sector (async + cached).
+
+    Caching Strategy:
+      - Stores parquet at data/sector-analysis/<sanitized_sector>.parquet
+      - If present (and not force_refresh) returns cached result.
+
+    Concurrency:
+      - Uses asyncio + to_thread to fetch each symbol's monthly analysis concurrently.
+      - Falls back to sequential logic if event loop issues arise.
+
+    Progress Bar:
+      - Removed for simplicity per request; concurrency makes simple callback progress
+        less deterministic. Could be reintroduced with an async-safe queue if needed.
+    """
+
+    # # Prepare cache path
+    # sector_dir = DATA_DIR / "sector-analysis"
+    # sector_dir.mkdir(parents=True, exist_ok=True)
+    # safe_sector = re.sub(r"[^A-Za-z0-9_-]+", "_", sector.strip())
+    # cache_path = sector_dir / f"{safe_sector}.parquet"
+
+    if stock_df is None:
+        stock_df = load_stock_metadata()
+
+    cache_path = get_cache_path_for_sector(sector)
+
+    if use_cache and not force_refresh and cache_path.exists():
+        try:
+            return pd.read_parquet(cache_path, engine="pyarrow")
+        except Exception:
+            try:
+                cache_path.unlink(missing_ok=True)  # type: ignore[arg-type]
+            except Exception:
+                pass
+
+    tickers = (
+        stock_df.loc[stock_df["sector"] == sector, "symbol"].dropna().unique().tolist()
+    )
+
+    if not tickers:
+        raise ValueError(f"No symbols found for sector '{sector}'")
+
+    async def _fetch(ticker: str):
+        try:
+            analysis = await asyncio.to_thread(get_monthly_analysis, ticker)
+            if analysis is None or analysis.empty:
+                return None
+            return ticker, analysis[MONTHS]
+
+        except Exception:
+            return None
+
+    async def _gather():
+        sem = asyncio.Semaphore(max_concurrency)
+
+        async def _bounded(ticker: str):
+            async with sem:
+                return await _fetch(ticker)
+
+        tasks = [asyncio.create_task(_bounded(s)) for s in tickers]
+        return await asyncio.gather(*tasks)
+
+    try:
+        results = asyncio.run(_gather())
+    except RuntimeError:
+        # Fallback to iterative solution for environments with existing event loop
+        results = []
+        for ticker in tickers:
+            try:
+                analysis = get_monthly_analysis(ticker)
+                if analysis is not None and not analysis.empty:
+                    results.append((ticker, analysis[MONTHS]))
+            except Exception:
+                continue
+
+    stock_monthly_results: list[pd.DataFrame] = []
+    retrieved_tickers: list[str] = []
+    for r in results:  # type: ignore
+        if not r:
+            continue
+        ticker, analysis = r
+        stock_monthly_results.append(analysis)
+        retrieved_tickers.append(ticker)
+
+    if not stock_monthly_results:
+        raise ValueError(f"Unable to build monthly data for sector '{sector}'")
+
+    combined = pd.concat(
+        stock_monthly_results, keys=retrieved_tickers, names=["symbol", "year"]
+    )  # type: ignore[arg-type]
+    sector_monthly = combined.groupby("year").mean(numeric_only=True)
+    result = sector_monthly.reindex(columns=MONTHS)
+
+    # result = sector_monthly.assign(
+    #     annual_returns=lambda d: d.loc[:, "Jan":"Dec"].agg(calc_annual_return, axis=1),
+    #     first_half_avg=lambda d: d.loc[:, "Jan":"Jun"].mean(axis=1),
+    #     second_half_avg=lambda d: d.loc[:, "Jul":"Dec"].mean(axis=1),
+    # )
+
+    # Write cache
+    if use_cache:
+        try:
+            result.to_parquet(cache_path, engine="pyarrow")
+        except Exception:
+            pass
+
+    return result
+
+
+@st.cache_data(ttl=60 * 60)
+def get_formatted_table(analysis: pd.DataFrame):
+    return (
+        analysis.assign(
             annual_returns=lambda df_: df_.loc[:, "Jan":"Dec"].agg(
                 calc_annual_return, axis=1
             ),
             first_half_avg=lambda df_: df_.loc[:, "Jan":"Jun"].mean(axis=1),
             second_half_avg=lambda df_: df_.loc[:, "Jul":"Dec"].mean(axis=1),
-        )
-        .pipe(add_avg_monthly_return)
-    )
-
-
-def format_analysis(analysis: pd.DataFrame):
-    return (
-        analysis[
+        )[
             [
                 *MONTHS[:6],
                 "first_half_avg",
@@ -82,6 +209,7 @@ def format_analysis(analysis: pd.DataFrame):
                 "annual_returns",
             ]
         ]
+        .pipe(add_avg_monthly_return)
         .rename(
             columns={
                 "annual_returns": "Total Annual Returns",
@@ -95,3 +223,16 @@ def format_analysis(analysis: pd.DataFrame):
         .mul(100)
         .round(2)
     )
+
+
+@st.cache_data
+def df_to_csv_bytes(df: pd.DataFrame) -> bytes:
+    return df.to_csv(index=True).encode("utf-8")
+
+
+@st.cache_data
+def df_to_excel_bytes(df: pd.DataFrame) -> bytes:
+    buf = io.BytesIO()
+    with pd.ExcelWriter(buf, engine="xlsxwriter") as writer:
+        df.to_excel(writer, sheet_name="Analysis", index=True)
+    return buf.getvalue()
