@@ -16,4 +16,4 @@ Link to website: https://price-action-analysis.streamlit.app/
 - [Dandu Asrith](https://github.com/asrith-306)
 - [Vaibhav R](https://github.com/VirtualReality0173)
 - [Amogh Ashok Prasad](https://github.com/Stable-Cloud)
-
+- [Atchyut Bhallamudi](https://github.com/atchyutbhallamudi)
