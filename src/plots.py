@@ -1,40 +1,32 @@
-import pandas as pd
 import plotly.express as px
 
 from .constants import MONTHS
 from .loader import (
-    download_closing_data,
+    add_avg_monthly_return,
     get_monthly_analysis,
+    get_sector_monthly_analysis,
 )
 
 
-def generate_heatmap(ticker: str, closing_data: pd.Series | None = None):
-    if closing_data is None:
-        closing_data = download_closing_data(ticker)
-
-    res = (
-        closing_data.to_frame("close")
-        .resample("ME")
-        .last()
-        .assign(
-            month=lambda df_: df_.index.strftime("%b"),  # type: ignore
-            year=lambda df_: df_.index.strftime("%Y"),  # type: ignore
-            monthly_returns=lambda df_: df_["close"].pct_change(),
-        )
-        .astype({"month": pd.CategoricalDtype(MONTHS, ordered=True)})
-        .pivot_table(
-            index="year", columns="month", values="monthly_returns", observed=True
-        )
+def generate_heatmap(
+    ticker: str,
+    min_year: int = 1900,
+    max_year: int = 2100,
+):
+    monthly = (
+        get_monthly_analysis(ticker)
+        .filter(items=[str(y) for y in range(min_year, max_year + 1)], axis="index")
+        .loc[:, MONTHS]
         .mul(100)
         .round(2)
     )
 
     fig = px.imshow(
-        res,
+        monthly,
         color_continuous_scale="RdYlGn",
         origin="upper",
         aspect="auto",
-        text_auto=".2f",
+        text_auto=".2f",  # type: ignore
         labels=dict(month="Month", year="Year", color="Return (%)"),
     )
     fig.update_xaxes(title="")
@@ -46,17 +38,17 @@ def generate_heatmap(ticker: str, closing_data: pd.Series | None = None):
     return fig
 
 
-def generate_monthly_avg_barchart(ticker: str, closing_data: pd.Series | None = None):
-    if closing_data is None:
-        closing_data = download_closing_data(ticker)
-
+def generate_monthly_avg_barchart(
+    ticker: str, min_year: int = 1900, max_year: int = 2100
+):
     res = (
-        get_monthly_analysis(ticker, closing_data)
+        get_monthly_analysis(ticker)
+        .filter(items=[str(y) for y in range(min_year, max_year + 1)], axis="index")
         .mul(100)
         .round(2)
+        .pipe(add_avg_monthly_return)
         .loc["monthly_avg", MONTHS]
     )  # type: ignore
-    
 
     fig = px.bar(
         x=res.index,
@@ -67,7 +59,75 @@ def generate_monthly_avg_barchart(ticker: str, closing_data: pd.Series | None = 
         color_continuous_scale="RdYlGn",
         text=res.apply(lambda x: f"{x:.2f}%"),
     )
-    # fig.update_layout(yaxis_tickformat=".02%")
     return fig
 
 
+def generate_sector_heatmap(
+    sector: str,
+    *,
+    min_year: int = 1900,
+    max_year: int = 2100,
+    use_cache: bool = True,
+    force_refresh: bool = False,
+) -> px.imshow:  # type: ignore
+    sector_df = get_sector_monthly_analysis(
+        sector,
+        use_cache=use_cache,
+        force_refresh=force_refresh,
+    )
+
+    filtered = (
+        sector_df.filter(
+            items=[str(y) for y in range(min_year, max_year + 1)], axis="index"
+        )
+        .mul(100)
+        .round(2)
+    )
+
+    fig = px.imshow(
+        filtered,
+        color_continuous_scale="RdYlGn",
+        origin="upper",
+        aspect="auto",
+        text_auto=".2f",  # type: ignore
+        labels=dict(month="Month", year="Year", color="Return (%)"),
+    )
+    fig.update_xaxes(title="")
+    fig.update_yaxes(title="Year")
+    fig.update_layout(
+        title=f"Sector Average Monthly Returns – {sector}",
+        coloraxis_colorbar_ticksuffix="%",
+    )
+    return fig
+
+
+def generate_sector_monthly_avg_barchart(
+    sector: str,
+    *,
+    min_year: int = 1900,
+    max_year: int = 2100,
+    use_cache: bool = True,
+    force_refresh: bool = False,
+):
+    sector_df = get_sector_monthly_analysis(
+        sector, use_cache=use_cache, force_refresh=force_refresh
+    )
+
+    sector_df = sector_df.filter(
+        items=[str(y) for y in range(min_year, max_year + 1)], axis="index"
+    )
+    sector_df = add_avg_monthly_return(sector_df)
+    if "monthly_avg" not in sector_df.index:
+        raise ValueError("Failed to compute monthly average for sector chart")
+
+    monthly_avg = sector_df.loc[["monthly_avg"], MONTHS].iloc[0].mul(100).round(2)
+    fig = px.bar(
+        x=monthly_avg.index,
+        y=monthly_avg.values,
+        labels={"x": "Month", "y": "Avg Monthly Returns (%)"},
+        title=f"Average Monthly Returns - Sector: {sector}",
+        color=monthly_avg.values,
+        color_continuous_scale="RdYlGn",
+        text=[f"{v:.2f}%" for v in monthly_avg.values],
+    )
+    return fig
