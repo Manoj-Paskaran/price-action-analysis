@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+import pandas as pd
 import streamlit as st
 
 from src.loader import (
@@ -10,6 +11,7 @@ from src.loader import (
     get_monthly_analysis,
     get_sector_monthly_analysis,
     load_stock_metadata,
+    monthly_hypothesis_results,
 )
 from src.plots import (
     generate_heatmap,
@@ -18,26 +20,24 @@ from src.plots import (
     generate_sector_monthly_avg_barchart,
 )
 
-#rel to task 2 by atc:
-from src.loader import monthly_hypothesis_results
-
 st.set_page_config(page_title="Price Action Dashboard", layout="wide")  # make page wide
 
 stock_df = load_stock_metadata()
 
-selected_sector = st.sidebar.selectbox(
-    "Choose a sector:", sorted(stock_df["sector"].dropna().unique()), index=1
-)
+sector_names = sorted(stock_df["sector"].dropna().unique().tolist())
+sector_names.insert(0, "All Sectors")
 
-sector_df = stock_df.query("sector == @selected_sector")
+selected_sector = st.sidebar.selectbox("Choose a sector:", sector_names, index=1)
 
-st.title("Price Action Dashboard")
-st.write(f"### Selected Stock: **{selected_stock_name}** `{selected_stock_ticker}`")
+if selected_sector == "All Sectors":
+    sector_df = stock_df
+elif selected_sector != "All Sectors":
+    sector_df = stock_df.query("sector == @selected_sector")
 
-tab1, tab2, tab3, tab4 = st.tabs(["📄 Price Action Data", "🔥 Heatmap", "📊 Bar Chart","📊 Stat Test"])
 stock_names = sector_df["company_name"].tolist()
-stock_names.insert(0, "Entire Sector")
 
+if selected_sector != "All Sectors":
+    stock_names.insert(0, "Entire Sector")
 
 selected_stock_name = st.sidebar.selectbox("Choose a stock:", stock_names, index=0)
 
@@ -87,26 +87,33 @@ if selected_ticker == "SECTOR":
     if cache_path.exists():
         age = datetime.now(timezone.utc).timestamp() - cache_path.stat().st_mtime
         cache_caption.caption(f"Last updated: {_format_age(age)}")
-else:
+
+elif selected_ticker != "SECTOR":
     data = get_monthly_analysis(selected_ticker)  # type: ignore
 
-st.write(
-    f"Data available from **{data.index.min()}** to **{data[data.index != 'monthly_avg'].index.max()}**"
-)
 min_year, max_year = data.index.min(), data.index.max()
 
-selected_min_year, selected_max_year = st.slider(
-    label="Select Year Range",
-    min_value=int(min_year),
-    max_value=int(max_year),
-    value=(int(min_year), int(max_year)),
-    step=1,
-)
+if min_year != max_year:
+    st.write(f"Data available from **{min_year}** to **{max_year}**")
+    selected_min_year, selected_max_year = st.slider(
+        label="Select Year Range",
+        min_value=int(min_year),
+        max_value=int(max_year),
+        value=(int(min_year), int(max_year)),
+        step=1,
+    )
+
+elif min_year == max_year:
+    selected_min_year = selected_max_year = int(min_year)
+    st.write(f"**Data available for year :** {min_year}")
+
 
 data = data.filter(
     items=[str(y) for y in range(selected_min_year, selected_max_year + 1)], axis=0
 )
-tab1, tab2, tab3 = st.tabs(["📄 Price Action Data", "🔥 Heatmap", "📊 Bar Chart"])
+tab1, tab2, tab3, tab4 = st.tabs(
+    ["📄 Price Action Data", "🔥 Heatmap", "📊 Bar Chart", "📊 Stat Test"]
+)
 
 with tab1:
     st.subheader("Price Action DataFrame")
@@ -171,22 +178,11 @@ with tab3:
 
 with tab4:
     st.subheader("Monthly Hypothesis Testing at 95% Confidence Interval")
-   
-    if filtered_df.shape[0] == 1:
-        selected_ticker = filtered_df["symbol"].values[0]
-        returns_df = get_monthly_analysis(selected_ticker)
-        results_dict = monthly_hypothesis_results(returns_df)
-        st.write("**Selected Stock:**", selected_ticker)
-    else:
-        combined_returns = []
-        for ticker in filtered_df["symbol"]:
-            df = get_monthly_analysis(ticker)
-            combined_returns.append(df)
-        avg_df = pd.concat(combined_returns).groupby(level=0).mean(numeric_only=True)
-        results_dict = monthly_hypothesis_results(avg_df)
-        st.write("**Selected Sector:**", selected_sector)
-    
-    results_df = pd.DataFrame(list(results_dict.items()), columns=["Month", "Hypothesis Test Result"])
+
+    results_dict = monthly_hypothesis_results(data)
+    results_df = pd.DataFrame(
+        list(results_dict.items()), columns=["Month", "Hypothesis Test Result"]
+    )
     st.dataframe(results_df)
 
 if selected_ticker == "SECTOR":
@@ -195,7 +191,7 @@ if selected_ticker == "SECTOR":
     if force_refresh_bottom:
         with st.spinner("Refreshing sector cache..."):
             data = get_sector_monthly_analysis(selected_sector, force_refresh=True)  # type: ignore[arg-type]
-        
+
         cache_path = get_cache_path_for_sector(str(selected_sector))
         if cache_path.exists():
             age = datetime.now(timezone.utc).timestamp() - cache_path.stat().st_mtime
