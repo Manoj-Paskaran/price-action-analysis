@@ -82,27 +82,6 @@ def get_sector_monthly_analysis(
     force_refresh: bool = False,
     max_concurrency: int = 8,
 ) -> pd.DataFrame:  # type: ignore
-    """Aggregate monthly returns for all symbols in a given sector (async + cached).
-
-    Caching Strategy:
-      - Stores parquet at data/sector-analysis/<sanitized_sector>.parquet
-      - If present (and not force_refresh) returns cached result.
-
-    Concurrency:
-      - Uses asyncio + to_thread to fetch each symbol's monthly analysis concurrently.
-      - Falls back to sequential logic if event loop issues arise.
-
-    Progress Bar:
-      - Removed for simplicity per request; concurrency makes simple callback progress
-        less deterministic. Could be reintroduced with an async-safe queue if needed.
-    """
-
-    # # Prepare cache path
-    # sector_dir = DATA_DIR / "sector-analysis"
-    # sector_dir.mkdir(parents=True, exist_ok=True)
-    # safe_sector = re.sub(r"[^A-Za-z0-9_-]+", "_", sector.strip())
-    # cache_path = sector_dir / f"{safe_sector}.parquet"
-
     if stock_df is None:
         stock_df = load_stock_metadata()
 
@@ -174,12 +153,6 @@ def get_sector_monthly_analysis(
     )  # type: ignore[arg-type]
     sector_monthly = combined.groupby("year").mean(numeric_only=True)
     result = sector_monthly.reindex(columns=MONTHS)
-
-    # result = sector_monthly.assign(
-    #     annual_returns=lambda d: d.loc[:, "Jan":"Dec"].agg(calc_annual_return, axis=1),
-    #     first_half_avg=lambda d: d.loc[:, "Jan":"Jun"].mean(axis=1),
-    #     second_half_avg=lambda d: d.loc[:, "Jul":"Dec"].mean(axis=1),
-    # )
 
     # Write cache
     if use_cache:
