@@ -13,13 +13,6 @@ def generate_heatmap(
     min_year: int = 1900,
     max_year: int = 2100,
 ):
-    """Generate a heatmap of historical monthly returns for a single ticker.
-
-    Delegates monthly computation to get_monthly_analysis for a single source
-    of truth and consistency with other views. Any provided closing_data is
-    ignored to keep logic simple; could be reintroduced if needed.
-    """
-
     monthly = (
         get_monthly_analysis(ticker)
         .filter(items=[str(y) for y in range(min_year, max_year + 1)], axis="index")
@@ -39,22 +32,23 @@ def generate_heatmap(
     fig.update_xaxes(title="")
     fig.update_yaxes(title="Year")
     fig.update_layout(
-        title=f"Historical Monthly Returns of {ticker}", coloraxis_colorbar_ticksuffix="%",
+        title=f"Historical Monthly Returns of {ticker}",
+        coloraxis_colorbar_ticksuffix="%",
     )
     return fig
 
 
-def generate_monthly_avg_barchart(ticker: str, min_year: int = 1900, max_year: int = 2100):
-
+def generate_monthly_avg_barchart(
+    ticker: str, min_year: int = 1900, max_year: int = 2100
+):
     res = (
         get_monthly_analysis(ticker)
-        .filter(items=[str(y) for y in range(min_year, max_year + 1)], axis='index')
+        .filter(items=[str(y) for y in range(min_year, max_year + 1)], axis="index")
         .mul(100)
         .round(2)
         .pipe(add_avg_monthly_return)
         .loc["monthly_avg", MONTHS]
     )  # type: ignore
-    
 
     fig = px.bar(
         x=res.index,
@@ -76,19 +70,6 @@ def generate_sector_heatmap(
     use_cache: bool = True,
     force_refresh: bool = False,
 ) -> px.imshow:  # type: ignore
-    """Generate a heatmap of equal-weight average monthly returns for a sector.
-
-    Parameters
-    ----------
-    sector : str
-        Sector name matching metadata 'sector'.
-    min_year, max_year : int
-        Inclusive year bounds to display.
-    use_cache : bool
-        Whether to read/write parquet cache.
-    force_refresh : bool
-        Ignore existing parquet and rebuild.
-    """
     sector_df = get_sector_monthly_analysis(
         sector,
         use_cache=use_cache,
@@ -96,8 +77,9 @@ def generate_sector_heatmap(
     )
 
     filtered = (
-        sector_df
-        .filter(items=[str(y) for y in range(min_year, max_year + 1)], axis="index")
+        sector_df.filter(
+            items=[str(y) for y in range(min_year, max_year + 1)], axis="index"
+        )
         .mul(100)
         .round(2)
     )
@@ -127,11 +109,6 @@ def generate_sector_monthly_avg_barchart(
     use_cache: bool = True,
     force_refresh: bool = False,
 ):
-    """Bar chart of equal-weight average monthly returns (percent) for a sector.
-
-    Fetches (or reads cached) sector monthly data, filters year range, derives
-    a monthly average row, and builds a colored bar chart.
-    """
     sector_df = get_sector_monthly_analysis(
         sector, use_cache=use_cache, force_refresh=force_refresh
     )
@@ -154,5 +131,3 @@ def generate_sector_monthly_avg_barchart(
         text=[f"{v:.2f}%" for v in monthly_avg.values],
     )
     return fig
-
-
