@@ -22,20 +22,19 @@ def get_cache_path_for_sector(sector: str) -> Path:
     return sector_dir / f"{safe_sector_name}.parquet"
 
 
-@st.cache_data(ttl=60 * 60)
 def load_stock_metadata() -> pd.DataFrame:
     return pd.read_parquet(
         DATA_DIR.joinpath("combined.parquet"), engine="pyarrow", dtype_backend="pyarrow"
     )
 
 
-@st.cache_data(ttl=60 * 60 * 24)
 def download_closing_data(ticker: str) -> pd.Series:
     closing_data = yf.download(
         ticker,
         period="max",
         multi_level_index=False,
         auto_adjust=True,
+        progress=False,
     )["Close"]  # type: ignore
 
     return closing_data
@@ -52,7 +51,6 @@ def add_avg_monthly_return(df: pd.DataFrame):
     return pd.concat([df, avg_monthly_returns])
 
 
-@st.cache_data(ttl=60 * 60)
 def get_monthly_analysis(
     ticker: str,
     stock_data: pd.Series | None = None,
@@ -166,6 +164,33 @@ def get_sector_monthly_analysis(
     return result
 
 
+def force_rewrite_all_sector_caches(
+    stock_df: pd.DataFrame | None = None,
+):
+    if stock_df is None:
+        stock_df = load_stock_metadata()
+
+    sectors_series = stock_df.get("sector")
+
+    sectors = sectors_series.dropna().astype(str).str.strip()  # type: ignore
+    sectors = sectors[sectors != ""].unique().tolist()
+
+    status: dict[str, str] = {}
+    for sector in sorted(sectors):
+        try:
+            _ = get_sector_monthly_analysis(
+                sector,
+                stock_df=stock_df,
+                use_cache=False,
+                force_refresh=True,
+            )
+            status[sector] = "ok"
+        except Exception as e:
+            status[sector] = f"error: {e}"
+
+    return status
+
+
 @st.cache_data(ttl=60 * 60)
 def get_formatted_table(analysis: pd.DataFrame):
     return (
@@ -230,14 +255,24 @@ def monthly_hypothesis_results(returns_df):
     return results
 
 
-@st.cache_data
 def df_to_csv_bytes(df: pd.DataFrame) -> bytes:
     return df.to_csv(index=True).encode("utf-8")
 
 
-@st.cache_data
 def df_to_excel_bytes(df: pd.DataFrame) -> bytes:
     buf = io.BytesIO()
     with pd.ExcelWriter(buf, engine="xlsxwriter") as writer:
         df.to_excel(writer, sheet_name="Analysis", index=True)
     return buf.getvalue()
+
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) < 2:
+        sys.exit(0)
+
+    if sys.argv[1] == "reload-sector-cache":
+        status = force_rewrite_all_sector_caches()
+        for sector, stat in status.items():
+            print(f"{sector}: {stat}")
+        sys.exit(0)
