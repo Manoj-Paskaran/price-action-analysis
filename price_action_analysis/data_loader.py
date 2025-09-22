@@ -27,6 +27,7 @@ def load_stock_metadata() -> pd.DataFrame:
         DATA_DIR.joinpath("combined.parquet"), engine="pyarrow", dtype_backend="pyarrow"
     )
 
+
 def download_closing_data(ticker: str) -> pd.Series:
     closing_data = yf.download(
         ticker,
@@ -162,6 +163,33 @@ def get_sector_monthly_analysis(
     return result
 
 
+def force_rewrite_all_sector_caches(
+    stock_df: pd.DataFrame | None = None,
+):
+    if stock_df is None:
+        stock_df = load_stock_metadata()
+
+    sectors_series = stock_df.get("sector")
+
+    sectors = sectors_series.dropna().astype(str).str.strip()  # type: ignore
+    sectors = sectors[sectors != ""].unique().tolist()
+
+    status: dict[str, str] = {}
+    for sector in sorted(sectors):
+        try:
+            _ = get_sector_monthly_analysis(
+                sector,
+                stock_df=stock_df,
+                use_cache=False,
+                force_refresh=True,
+            )
+            status[sector] = "ok"
+        except Exception as e:
+            status[sector] = f"error: {e}"
+
+    return status
+
+
 @st.cache_data(ttl=60 * 60)
 def get_formatted_table(analysis: pd.DataFrame):
     return (
@@ -235,3 +263,15 @@ def df_to_excel_bytes(df: pd.DataFrame) -> bytes:
     with pd.ExcelWriter(buf, engine="xlsxwriter") as writer:
         df.to_excel(writer, sheet_name="Analysis", index=True)
     return buf.getvalue()
+
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) < 2:
+        sys.exit(0)
+
+    if sys.argv[1] == "reload-sector-cache":
+        status = force_rewrite_all_sector_caches()
+        for sector, stat in status.items():
+            print(f"{sector}: {stat}")
+        sys.exit(0)
