@@ -34,6 +34,7 @@ def download_closing_data(ticker: str) -> pd.Series:
         period="max",
         multi_level_index=False,
         auto_adjust=True,
+        progress=False,
     )["Close"]  # type: ignore
 
     return closing_data
