@@ -1,7 +1,7 @@
 import plotly.express as px
 
 from .constants import MONTHS
-from .loader import (
+from .data_loader import (
     add_avg_monthly_return,
     get_monthly_analysis,
     get_sector_monthly_analysis,

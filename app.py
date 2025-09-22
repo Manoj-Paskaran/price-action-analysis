@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 import pandas as pd
 import streamlit as st
 
-from src.loader import (
+from price_action_analysis.data_loader import (
     df_to_csv_bytes,
     df_to_excel_bytes,
     get_cache_path_for_sector,
@@ -13,14 +13,14 @@ from src.loader import (
     load_stock_metadata,
     monthly_hypothesis_results,
 )
-from src.plots import (
+from price_action_analysis.plots import (
     generate_heatmap,
     generate_monthly_avg_barchart,
     generate_sector_heatmap,
     generate_sector_monthly_avg_barchart,
 )
 
-st.set_page_config(page_title="Price Action Dashboard", layout="wide")  # make page wide
+st.set_page_config(page_title="Price Action Dashboard", layout="wide")
 
 stock_df = load_stock_metadata()
 
