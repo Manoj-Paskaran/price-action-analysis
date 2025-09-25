@@ -1,0 +1,398 @@
+symbol,company_name,index
+ABBOTINDIA,Abbott India Ltd.,Nifty500Healthcare
+AJANTPHARM,Ajanta Pharmaceuticals Ltd.,Nifty500Healthcare
+APLLTD,Alembic Pharmaceuticals Ltd.,Nifty500Healthcare
+ALIVUS,Alivus Life Sciences Ltd.,Nifty500Healthcare
+ALKEM,Alkem Laboratories Ltd.,Nifty500Healthcare
+APOLLOHOSP,Apollo Hospitals Enterprise Ltd.,Nifty500Healthcare
+ASTERDM,Aster DM Healthcare Ltd.,Nifty500Healthcare
+ASTRAZEN,AstraZenca Pharma India Ltd.,Nifty500Healthcare
+AUROPHARMA,Aurobindo Pharma Ltd.,Nifty500Healthcare
+BIOCON,Biocon Ltd.,Nifty500Healthcare
+CAPLIPOINT,Caplin Point Laboratories Ltd.,Nifty500Healthcare
+CIPLA,Cipla Ltd.,Nifty500Healthcare
+COHANCE,Cohance Lifesciences Ltd.,Nifty500Healthcare
+CONCORDBIO,Concord Biotech Ltd.,Nifty500Healthcare
+DIVISLAB,Divi's Laboratories Ltd.,Nifty500Healthcare
+LALPATHLAB,Dr. Lal Path Labs Ltd.,Nifty500Healthcare
+DRREDDY,Dr. Reddy's Laboratories Ltd.,Nifty500Healthcare
+EMCURE,Emcure Pharmaceuticals Ltd.,Nifty500Healthcare
+ERIS,Eris Lifesciences Ltd.,Nifty500Healthcare
+FORTIS,Fortis Healthcare Ltd.,Nifty500Healthcare
+GLAND,Gland Pharma Ltd.,Nifty500Healthcare
+GLAXO,Glaxosmithkline Pharmaceuticals Ltd.,Nifty500Healthcare
+GLENMARK,Glenmark Pharmaceuticals Ltd.,Nifty500Healthcare
+MEDANTA,Global Health Ltd.,Nifty500Healthcare
+GRANULES,Granules India Ltd.,Nifty500Healthcare
+INDGN,Indegene Ltd.,Nifty500Healthcare
+IPCALAB,Ipca Laboratories Ltd.,Nifty500Healthcare
+JBCHEPHARM,J.B. Chemicals & Pharmaceuticals Ltd.,Nifty500Healthcare
+JUBLPHARMA,Jubilant Pharmova Ltd.,Nifty500Healthcare
+KIMS,Krishna Institute of Medical Sciences Ltd.,Nifty500Healthcare
+LAURUSLABS,Laurus Labs Ltd.,Nifty500Healthcare
+LUPIN,Lupin Ltd.,Nifty500Healthcare
+MANKIND,Mankind Pharma Ltd.,Nifty500Healthcare
+MAXHEALTH,Max Healthcare Institute Ltd.,Nifty500Healthcare
+METROPOLIS,Metropolis Healthcare Ltd.,Nifty500Healthcare
+NATCOPHARM,NATCO Pharma Ltd.,Nifty500Healthcare
+NH,Narayana Hrudayalaya Ltd.,Nifty500Healthcare
+NEULANDLAB,Neuland Laboratories Ltd.,Nifty500Healthcare
+PFIZER,Pfizer Ltd.,Nifty500Healthcare
+PPLPHARMA,Piramal Pharma Ltd.,Nifty500Healthcare
+POLYMED,Poly Medicure Ltd.,Nifty500Healthcare
+RAINBOW,Rainbow Childrens Medicare Ltd.,Nifty500Healthcare
+SAILIFE,Sai Life Sciences Ltd.,Nifty500Healthcare
+SUNPHARMA,Sun Pharmaceutical Industries Ltd.,Nifty500Healthcare
+SYNGENE,Syngene International Ltd.,Nifty500Healthcare
+TORNTPHARM,Torrent Pharmaceuticals Ltd.,Nifty500Healthcare
+VIJAYA,Vijaya Diagnostic Centre Ltd.,Nifty500Healthcare
+ZYDUSLIFE,Zydus Lifesciences Ltd.,Nifty500Healthcare
+ATGL,Adani Total Gas Ltd.,Niftyoil And Gas
+AEGISLOG,Aegis Logistics Ltd.,Niftyoil And Gas
+BPCL,Bharat Petroleum Corporation Ltd.,Niftyoil And Gas
+CASTROLIND,Castrol India Ltd.,Niftyoil And Gas
+GAIL,GAIL (India) Ltd.,Niftyoil And Gas
+GUJGASLTD,Gujarat Gas Ltd.,Niftyoil And Gas
+GSPL,Gujarat State Petronet Ltd.,Niftyoil And Gas
+HINDPETRO,Hindustan Petroleum Corporation Ltd.,Niftyoil And Gas
+IOC,Indian Oil Corporation Ltd.,Niftyoil And Gas
+IGL,Indraprastha Gas Ltd.,Niftyoil And Gas
+MGL,Mahanagar Gas Ltd.,Niftyoil And Gas
+ONGC,Oil & Natural Gas Corporation Ltd.,Niftyoil And Gas
+OIL,Oil India Ltd.,Niftyoil And Gas
+PETRONET,Petronet LNG Ltd.,Niftyoil And Gas
+RELIANCE,Reliance Industries Ltd.,Niftyoil And Gas
+AMBER,Amber Enterprises India Ltd.,Niftyconsumer Durables
+BATAINDIA,Bata India Ltd.,Niftyconsumer Durables
+BLUESTARCO,Blue Star Ltd.,Niftyconsumer Durables
+CENTURYPLY,Century Plyboards (India) Ltd.,Niftyconsumer Durables
+CERA,Cera Sanitaryware Ltd,Niftyconsumer Durables
+CROMPTON,Crompton Greaves Consumer Electricals Ltd.,Niftyconsumer Durables
+DIXON,Dixon Technologies (India) Ltd.,Niftyconsumer Durables
+HAVELLS,Havells India Ltd.,Niftyconsumer Durables
+KAJARIACER,Kajaria Ceramics Ltd.,Niftyconsumer Durables
+KALYANKJIL,Kalyan Jewellers India Ltd.,Niftyconsumer Durables
+PGEL,PG Electroplast Ltd.,Niftyconsumer Durables
+TITAN,Titan Company Ltd.,Niftyconsumer Durables
+VGUARD,V-Guard Industries Ltd.,Niftyconsumer Durables
+VOLTAS,Voltas Ltd.,Niftyconsumer Durables
+WHIRLPOOL,Whirlpool of India Ltd.,Niftyconsumer Durables
+ANANTRAJ,Anant Raj Ltd.,Niftyrealty
+BRIGADE,Brigade Enterprises Ltd.,Niftyrealty
+DLF,DLF Ltd.,Niftyrealty
+GODREJPROP,Godrej Properties Ltd.,Niftyrealty
+LODHA,Lodha Developers Ltd.,Niftyrealty
+OBEROIRLTY,Oberoi Realty Ltd.,Niftyrealty
+PHOENIXLTD,Phoenix Mills Ltd.,Niftyrealty
+PRESTIGE,Prestige Estates Projects Ltd.,Niftyrealty
+RAYMOND,Raymond Ltd.,Niftyrealty
+SOBHA,Sobha Ltd.,Niftyrealty
+BANKBARODA,Bank of Baroda,Niftypsu Bank
+BANKINDIA,Bank of India,Niftypsu Bank
+MAHABANK,Bank of Maharashtra,Niftypsu Bank
+CANBK,Canara Bank,Niftypsu Bank
+CENTRALBK,Central Bank of India,Niftypsu Bank
+INDIANB,Indian Bank,Niftypsu Bank
+IOB,Indian Overseas Bank,Niftypsu Bank
+PSB,Punjab & Sind Bank,Niftypsu Bank
+PNB,Punjab National Bank,Niftypsu Bank
+SBIN,State Bank of India,Niftypsu Bank
+UCOBANK,UCO Bank,Niftypsu Bank
+UNIONBANK,Union Bank of India,Niftypsu Bank
+AXISBANK,Axis Bank Ltd.,Nifty_Private Bank
+BANDHANBNK,Bandhan Bank Ltd.,Nifty_Private Bank
+FEDERALBNK,Federal Bank Ltd.,Nifty_Private Bank
+HDFCBANK,HDFC Bank Ltd.,Nifty_Private Bank
+ICICIBANK,ICICI Bank Ltd.,Nifty_Private Bank
+IDFCFIRSTB,IDFC First Bank Ltd.,Nifty_Private Bank
+INDUSINDBK,IndusInd Bank Ltd.,Nifty_Private Bank
+KOTAKBANK,Kotak Mahindra Bank Ltd.,Nifty_Private Bank
+RBLBANK,RBL Bank Ltd.,Nifty_Private Bank
+YESBANK,Yes Bank Ltd.,Nifty_Private Bank
+ABBOTINDIA,Abbott India Ltd.,Niftypharma
+AJANTPHARM,Ajanta Pharmaceuticals Ltd.,Niftypharma
+ALKEM,Alkem Laboratories Ltd.,Niftypharma
+AUROPHARMA,Aurobindo Pharma Ltd.,Niftypharma
+BIOCON,Biocon Ltd.,Niftypharma
+CIPLA,Cipla Ltd.,Niftypharma
+DIVISLAB,Divi's Laboratories Ltd.,Niftypharma
+DRREDDY,Dr. Reddy's Laboratories Ltd.,Niftypharma
+GLAND,Gland Pharma Ltd.,Niftypharma
+GLENMARK,Glenmark Pharmaceuticals Ltd.,Niftypharma
+GRANULES,Granules India Ltd.,Niftypharma
+IPCALAB,Ipca Laboratories Ltd.,Niftypharma
+JBCHEPHARM,J.B. Chemicals & Pharmaceuticals Ltd.,Niftypharma
+LAURUSLABS,Laurus Labs Ltd.,Niftypharma
+LUPIN,Lupin Ltd.,Niftypharma
+MANKIND,Mankind Pharma Ltd.,Niftypharma
+NATCOPHARM,NATCO Pharma Ltd.,Niftypharma
+SUNPHARMA,Sun Pharmaceutical Industries Ltd.,Niftypharma
+TORNTPHARM,Torrent Pharmaceuticals Ltd.,Niftypharma
+ZYDUSLIFE,Zydus Lifesciences Ltd.,Niftypharma
+APLAPOLLO,APL Apollo Tubes Ltd.,Niftymetal
+ADANIENT,Adani Enterprises Ltd.,Niftymetal
+HINDALCO,Hindalco Industries Ltd.,Niftymetal
+HINDCOPPER,Hindustan Copper Ltd.,Niftymetal
+HINDZINC,Hindustan Zinc Ltd.,Niftymetal
+JSWSTEEL,JSW Steel Ltd.,Niftymetal
+JSL,Jindal Stainless Ltd.,Niftymetal
+JINDALSTEL,Jindal Steel Ltd.,Niftymetal
+LLOYDSME,Lloyds Metals And Energy Ltd.,Niftymetal
+NMDC,NMDC Ltd.,Niftymetal
+NATIONALUM,National Aluminium Co. Ltd.,Niftymetal
+SAIL,Steel Authority of India Ltd.,Niftymetal
+TATASTEEL,Tata Steel Ltd.,Niftymetal
+VEDL,Vedanta Ltd.,Niftymetal
+WELCORP,Welspun Corp Ltd.,Niftymetal
+DBCORP,D.B.Corp Ltd.,Niftymedia
+DISHTV,Dish TV India Ltd.,Niftymedia
+HATHWAY,Hathway Cable & Datacom Ltd.,Niftymedia
+NAZARA,Nazara Technologies Ltd.,Niftymedia
+NETWORK18,Network18 Media & Investments Ltd.,Niftymedia
+PVRINOX,PVR INOX Ltd.,Niftymedia
+SAREGAMA,Saregama India Ltd,Niftymedia
+SUNTV,Sun TV Network Ltd.,Niftymedia
+TIPSMUSIC,Tips Music Ltd.,Niftymedia
+ZEEL,Zee Entertainment Enterprises Ltd.,Niftymedia
+COFORGE,Coforge Ltd.,Niftyit
+HCLTECH,HCL Technologies Ltd.,Niftyit
+INFY,Infosys Ltd.,Niftyit
+LTIM,LTIMindtree Ltd.,Niftyit
+MPHASIS,MphasiS Ltd.,Niftyit
+OFSS,Oracle Financial Services Software Ltd.,Niftyit
+PERSISTENT,Persistent Systems Ltd.,Niftyit
+TCS,Tata Consultancy Services Ltd.,Niftyit
+TECHM,Tech Mahindra Ltd.,Niftyit
+WIPRO,Wipro Ltd.,Niftyit
+ABBOTINDIA,Abbott India Ltd.,Niftyhealthcare
+ALKEM,Alkem Laboratories Ltd.,Niftyhealthcare
+APOLLOHOSP,Apollo Hospitals Enterprise Ltd.,Niftyhealthcare
+AUROPHARMA,Aurobindo Pharma Ltd.,Niftyhealthcare
+BIOCON,Biocon Ltd.,Niftyhealthcare
+CIPLA,Cipla Ltd.,Niftyhealthcare
+DIVISLAB,Divi's Laboratories Ltd.,Niftyhealthcare
+DRREDDY,Dr. Reddy's Laboratories Ltd.,Niftyhealthcare
+FORTIS,Fortis Healthcare Ltd.,Niftyhealthcare
+GLENMARK,Glenmark Pharmaceuticals Ltd.,Niftyhealthcare
+GRANULES,Granules India Ltd.,Niftyhealthcare
+IPCALAB,Ipca Laboratories Ltd.,Niftyhealthcare
+LAURUSLABS,Laurus Labs Ltd.,Niftyhealthcare
+LUPIN,Lupin Ltd.,Niftyhealthcare
+MANKIND,Mankind Pharma Ltd.,Niftyhealthcare
+MAXHEALTH,Max Healthcare Institute Ltd.,Niftyhealthcare
+SUNPHARMA,Sun Pharmaceutical Industries Ltd.,Niftyhealthcare
+SYNGENE,Syngene International Ltd.,Niftyhealthcare
+TORNTPHARM,Torrent Pharmaceuticals Ltd.,Niftyhealthcare
+ZYDUSLIFE,Zydus Lifesciences Ltd.,Niftyhealthcare
+BRITANNIA,Britannia Industries Ltd.,Niftyfmcg
+COLPAL,Colgate Palmolive (India) Ltd.,Niftyfmcg
+DABUR,Dabur India Ltd.,Niftyfmcg
+EMAMILTD,Emami Ltd.,Niftyfmcg
+GODREJCP,Godrej Consumer Products Ltd.,Niftyfmcg
+HINDUNILVR,Hindustan Unilever Ltd.,Niftyfmcg
+ITC,ITC Ltd.,Niftyfmcg
+MARICO,Marico Ltd.,Niftyfmcg
+NESTLEIND,Nestle India Ltd.,Niftyfmcg
+PATANJALI,Patanjali Foods Ltd.,Niftyfmcg
+RADICO,Radico Khaitan Ltd,Niftyfmcg
+TATACONSUM,Tata Consumer Products Ltd.,Niftyfmcg
+UBL,United Breweries Ltd.,Niftyfmcg
+UNITDSPR,United Spirits Ltd.,Niftyfmcg
+VBL,Varun Beverages Ltd.,Niftyfmcg
+ABCAPITAL,Aditya Birla Capital Ltd.,Niftyfinancial Services Ex Bank
+ANGELONE,Angel One Ltd.,Niftyfinancial Services Ex Bank
+BSE,BSE Ltd.,Niftyfinancial Services Ex Bank
+BAJFINANCE,Bajaj Finance Ltd.,Niftyfinancial Services Ex Bank
+BAJAJFINSV,Bajaj Finserv Ltd.,Niftyfinancial Services Ex Bank
+CDSL,Central Depository Services (India) Ltd.,Niftyfinancial Services Ex Bank
+CHOLAFIN,Cholamandalam Investment and Finance Company Ltd.,Niftyfinancial Services Ex Bank
+CAMS,Computer Age Management Services Ltd.,Niftyfinancial Services Ex Bank
+HDFCAMC,HDFC Asset Management Company Ltd.,Niftyfinancial Services Ex Bank
+HDFCLIFE,HDFC Life Insurance Company Ltd.,Niftyfinancial Services Ex Bank
+ICICIGI,ICICI Lombard General Insurance Company Ltd.,Niftyfinancial Services Ex Bank
+ICICIPRULI,ICICI Prudential Life Insurance Company Ltd.,Niftyfinancial Services Ex Bank
+IEX,Indian Energy Exchange Ltd.,Niftyfinancial Services Ex Bank
+IRFC,Indian Railway Finance Corporation Ltd.,Niftyfinancial Services Ex Bank
+JIOFIN,Jio Financial Services Ltd.,Niftyfinancial Services Ex Bank
+LTF,L&T Finance Ltd.,Niftyfinancial Services Ex Bank
+LICHSGFIN,LIC Housing Finance Ltd.,Niftyfinancial Services Ex Bank
+LICI,Life Insurance Corporation of India,Niftyfinancial Services Ex Bank
+M&MFIN,Mahindra & Mahindra Financial Services Ltd.,Niftyfinancial Services Ex Bank
+MFSL,Max Financial Services Ltd.,Niftyfinancial Services Ex Bank
+MCX,Multi Commodity Exchange of India Ltd.,Niftyfinancial Services Ex Bank
+MUTHOOTFIN,Muthoot Finance Ltd.,Niftyfinancial Services Ex Bank
+PAYTM,One 97 Communications Ltd.,Niftyfinancial Services Ex Bank
+POLICYBZR,PB Fintech Ltd.,Niftyfinancial Services Ex Bank
+PEL,Piramal Enterprises Ltd.,Niftyfinancial Services Ex Bank
+PFC,Power Finance Corporation Ltd.,Niftyfinancial Services Ex Bank
+RECLTD,REC Ltd.,Niftyfinancial Services Ex Bank
+SBICARD,SBI Cards and Payment Services Ltd.,Niftyfinancial Services Ex Bank
+SBILIFE,SBI Life Insurance Company Ltd.,Niftyfinancial Services Ex Bank
+SHRIRAMFIN,Shriram Finance Ltd.,Niftyfinancial Services Ex Bank
+AXISBANK,Axis Bank Ltd.,Niftyfinancial Services 25/50
+BAJFINANCE,Bajaj Finance Ltd.,Niftyfinancial Services 25/50
+BAJAJFINSV,Bajaj Finserv Ltd.,Niftyfinancial Services 25/50
+CHOLAFIN,Cholamandalam Investment and Finance Company Ltd.,Niftyfinancial Services 25/50
+HDFCAMC,HDFC Asset Management Company Ltd.,Niftyfinancial Services 25/50
+HDFCBANK,HDFC Bank Ltd.,Niftyfinancial Services 25/50
+HDFCLIFE,HDFC Life Insurance Company Ltd.,Niftyfinancial Services 25/50
+ICICIBANK,ICICI Bank Ltd.,Niftyfinancial Services 25/50
+ICICIGI,ICICI Lombard General Insurance Company Ltd.,Niftyfinancial Services 25/50
+ICICIPRULI,ICICI Prudential Life Insurance Company Ltd.,Niftyfinancial Services 25/50
+JIOFIN,Jio Financial Services Ltd.,Niftyfinancial Services 25/50
+KOTAKBANK,Kotak Mahindra Bank Ltd.,Niftyfinancial Services 25/50
+LICHSGFIN,LIC Housing Finance Ltd.,Niftyfinancial Services 25/50
+MUTHOOTFIN,Muthoot Finance Ltd.,Niftyfinancial Services 25/50
+PFC,Power Finance Corporation Ltd.,Niftyfinancial Services 25/50
+RECLTD,REC Ltd.,Niftyfinancial Services 25/50
+SBICARD,SBI Cards and Payment Services Ltd.,Niftyfinancial Services 25/50
+SBILIFE,SBI Life Insurance Company Ltd.,Niftyfinancial Services 25/50
+SHRIRAMFIN,Shriram Finance Ltd.,Niftyfinancial Services 25/50
+SBIN,State Bank of India,Niftyfinancial Services 25/50
+AXISBANK,Axis Bank Ltd.,Niftyfinance
+BAJFINANCE,Bajaj Finance Ltd.,Niftyfinance
+BAJAJFINSV,Bajaj Finserv Ltd.,Niftyfinance
+CHOLAFIN,Cholamandalam Investment and Finance Company Ltd.,Niftyfinance
+HDFCAMC,HDFC Asset Management Company Ltd.,Niftyfinance
+HDFCBANK,HDFC Bank Ltd.,Niftyfinance
+HDFCLIFE,HDFC Life Insurance Company Ltd.,Niftyfinance
+ICICIBANK,ICICI Bank Ltd.,Niftyfinance
+ICICIGI,ICICI Lombard General Insurance Company Ltd.,Niftyfinance
+ICICIPRULI,ICICI Prudential Life Insurance Company Ltd.,Niftyfinance
+JIOFIN,Jio Financial Services Ltd.,Niftyfinance
+KOTAKBANK,Kotak Mahindra Bank Ltd.,Niftyfinance
+LICHSGFIN,LIC Housing Finance Ltd.,Niftyfinance
+MUTHOOTFIN,Muthoot Finance Ltd.,Niftyfinance
+PFC,Power Finance Corporation Ltd.,Niftyfinance
+RECLTD,REC Ltd.,Niftyfinance
+SBICARD,SBI Cards and Payment Services Ltd.,Niftyfinance
+SBILIFE,SBI Life Insurance Company Ltd.,Niftyfinance
+SHRIRAMFIN,Shriram Finance Ltd.,Niftyfinance
+SBIN,State Bank of India,Niftyfinance
+AARTIIND,Aarti Industries Ltd.,Niftychemicals
+ATUL,Atul Ltd.,Niftychemicals
+BAYERCROP,Bayer Cropscience Ltd.,Niftychemicals
+CHAMBLFERT,Chambal Fertilizers & Chemicals Ltd.,Niftychemicals
+COROMANDEL,Coromandel International Ltd.,Niftychemicals
+DEEPAKNTR,Deepak Nitrite Ltd.,Niftychemicals
+EIDPARRY,E.I.D. Parry (India) Ltd.,Niftychemicals
+FLUOROCHEM,Gujarat Fluorochemicals Ltd.,Niftychemicals
+GNFC,Gujarat Narmada Valley Fertilizers and Chemicals Ltd.,Niftychemicals
+HSCL,Himadri Speciality Chemical Ltd.,Niftychemicals
+LINDEINDIA,Linde India Ltd.,Niftychemicals
+NAVINFLUOR,Navin Fluorine International Ltd.,Niftychemicals
+PCBL,PCBL Chemical Ltd.,Niftychemicals
+PIIND,PI Industries Ltd.,Niftychemicals
+PIDILITIND,Pidilite Industries Ltd.,Niftychemicals
+SRF,SRF Ltd.,Niftychemicals
+SOLARINDS,Solar Industries India Ltd.,Niftychemicals
+SUMICHEM,Sumitomo Chemical India Ltd.,Niftychemicals
+TATACHEM,Tata Chemicals Ltd.,Niftychemicals
+UPL,UPL Ltd.,Niftychemicals
+AUBANK,AU Small Finance Bank Ltd.,Niftybank
+AXISBANK,Axis Bank Ltd.,Niftybank
+BANKBARODA,Bank of Baroda,Niftybank
+CANBK,Canara Bank,Niftybank
+FEDERALBNK,Federal Bank Ltd.,Niftybank
+HDFCBANK,HDFC Bank Ltd.,Niftybank
+ICICIBANK,ICICI Bank Ltd.,Niftybank
+IDFCFIRSTB,IDFC First Bank Ltd.,Niftybank
+INDUSINDBK,IndusInd Bank Ltd.,Niftybank
+KOTAKBANK,Kotak Mahindra Bank Ltd.,Niftybank
+PNB,Punjab National Bank,Niftybank
+SBIN,State Bank of India,Niftybank
+ASHOKLEY,Ashok Leyland Ltd.,Niftyauto
+BAJAJ-AUTO,Bajaj Auto Ltd.,Niftyauto
+BALKRISIND,Balkrishna Industries Ltd.,Niftyauto
+BHARATFORG,Bharat Forge Ltd.,Niftyauto
+BOSCHLTD,Bosch Ltd.,Niftyauto
+EICHERMOT,Eicher Motors Ltd.,Niftyauto
+EXIDEIND,Exide Industries Ltd.,Niftyauto
+HEROMOTOCO,Hero MotoCorp Ltd.,Niftyauto
+MRF,MRF Ltd.,Niftyauto
+M&M,Mahindra & Mahindra Ltd.,Niftyauto
+MARUTI,Maruti Suzuki India Ltd.,Niftyauto
+MOTHERSON,Samvardhana Motherson International Ltd.,Niftyauto
+TVSMOTOR,TVS Motor Company Ltd.,Niftyauto
+TATAMOTORS,Tata Motors Ltd.,Niftyauto
+TIINDIA,Tube Investments of India Ltd.,Niftyauto
+BSOFT,Birlasoft Ltd.,Niftymidsmall It & Telecom
+COFORGE,Coforge Ltd.,Niftymidsmall It & Telecom
+CYIENT,Cyient Ltd.,Niftymidsmall It & Telecom
+FSL,Firstsource Solutions Ltd.,Niftymidsmall It & Telecom
+HFCL,HFCL Ltd.,Niftymidsmall It & Telecom
+HAPPSTMNDS,Happiest Minds Technologies Ltd.,Niftymidsmall It & Telecom
+INTELLECT,Intellect Design Arena Ltd.,Niftymidsmall It & Telecom
+KPITTECH,KPIT Technologies Ltd.,Niftymidsmall It & Telecom
+LTTS,L&T Technology Services Ltd.,Niftymidsmall It & Telecom
+MASTEK,Mastek Ltd.,Niftymidsmall It & Telecom
+MPHASIS,MphasiS Ltd.,Niftymidsmall It & Telecom
+OFSS,Oracle Financial Services Software Ltd.,Niftymidsmall It & Telecom
+PERSISTENT,Persistent Systems Ltd.,Niftymidsmall It & Telecom
+ROUTE,Route Mobile Ltd.,Niftymidsmall It & Telecom
+SONATSOFTW,Sonata Software Ltd.,Niftymidsmall It & Telecom
+STLTECH,Sterlite Technologies Ltd.,Niftymidsmall It & Telecom
+TATACOMM,Tata Communications Ltd.,Niftymidsmall It & Telecom
+TATAELXSI,Tata Elxsi Ltd.,Niftymidsmall It & Telecom
+IDEA,Vodafone Idea Ltd.,Niftymidsmall It & Telecom
+ZENSARTECH,Zensar Technolgies Ltd.,Niftymidsmall It & Telecom
+ABBOTINDIA,Abbott India Ltd.,Niftymidsmall Healthcare
+AJANTPHARM,Ajanta Pharmaceuticals Ltd.,Niftymidsmall Healthcare
+APLLTD,Alembic Pharmaceuticals Ltd.,Niftymidsmall Healthcare
+ALKEM,Alkem Laboratories Ltd.,Niftymidsmall Healthcare
+AUROPHARMA,Aurobindo Pharma Ltd.,Niftymidsmall Healthcare
+LALPATHLAB,Dr. Lal Path Labs Ltd.,Niftymidsmall Healthcare
+ERIS,Eris Lifesciences Ltd.,Niftymidsmall Healthcare
+FORTIS,Fortis Healthcare Ltd.,Niftymidsmall Healthcare
+GLAXO,Glaxosmithkline Pharmaceuticals Ltd.,Niftymidsmall Healthcare
+GLENMARK,Glenmark Pharmaceuticals Ltd.,Niftymidsmall Healthcare
+GRANULES,Granules India Ltd.,Niftymidsmall Healthcare
+IPCALAB,Ipca Laboratories Ltd.,Niftymidsmall Healthcare
+JBCHEPHARM,J.B. Chemicals & Pharmaceuticals Ltd.,Niftymidsmall Healthcare
+JUBLPHARMA,Jubilant Pharmova Ltd.,Niftymidsmall Healthcare
+KIMS,Krishna Institute of Medical Sciences Ltd.,Niftymidsmall Healthcare
+LAURUSLABS,Laurus Labs Ltd.,Niftymidsmall Healthcare
+MAXHEALTH,Max Healthcare Institute Ltd.,Niftymidsmall Healthcare
+MEDPLUS,Medplus Health Services Ltd.,Niftymidsmall Healthcare
+METROPOLIS,Metropolis Healthcare Ltd.,Niftymidsmall Healthcare
+NATCOPHARM,NATCO Pharma Ltd.,Niftymidsmall Healthcare
+NH,Narayana Hrudayalaya Ltd.,Niftymidsmall Healthcare
+PFIZER,Pfizer Ltd.,Niftymidsmall Healthcare
+POLYMED,Poly Medicure Ltd.,Niftymidsmall Healthcare
+PGHL,Procter & Gamble Health Ltd.,Niftymidsmall Healthcare
+SANOFI,Sanofi India Ltd.,Niftymidsmall Healthcare
+SEQUENT,Sequent Scientific Ltd.,Niftymidsmall Healthcare
+SOLARA,Solara Active Pharma Sciences Ltd.,Niftymidsmall Healthcare
+STAR,Strides Pharma Science Ltd.,Niftymidsmall Healthcare
+SUVENPHAR,Suven Pharmaceuticals Ltd.,Niftymidsmall Healthcare
+SYNGENE,Syngene International Ltd.,Niftymidsmall Healthcare
+AUBANK,AU Small Finance Bank Ltd.,Niftymidsmall Financailservice
+ABCAPITAL,Aditya Birla Capital Ltd.,Niftymidsmall Financailservice
+ANGELONE,Angel One Ltd.,Niftymidsmall Financailservice
+BSE,BSE Ltd.,Niftymidsmall Financailservice
+BANDHANBNK,Bandhan Bank Ltd.,Niftymidsmall Financailservice
+BANKINDIA,Bank of India,Niftymidsmall Financailservice
+CDSL,Central Depository Services (India) Ltd.,Niftymidsmall Financailservice
+CAMS,Computer Age Management Services Ltd.,Niftymidsmall Financailservice
+FEDERALBNK,Federal Bank Ltd.,Niftymidsmall Financailservice
+HDFCAMC,HDFC Asset Management Company Ltd.,Niftymidsmall Financailservice
+HUDCO,Housing & Urban Development Corporation Ltd.,Niftymidsmall Financailservice
+IDFCFIRSTB,IDFC First Bank Ltd.,Niftymidsmall Financailservice
+INDIANB,Indian Bank,Niftymidsmall Financailservice
+IEX,Indian Energy Exchange Ltd.,Niftymidsmall Financailservice
+LTF,L&T Finance Ltd.,Niftymidsmall Financailservice
+LICHSGFIN,LIC Housing Finance Ltd.,Niftymidsmall Financailservice
+M&MFIN,Mahindra & Mahindra Financial Services Ltd.,Niftymidsmall Financailservice
+MANAPPURAM,Manappuram Finance Ltd.,Niftymidsmall Financailservice
+MFSL,Max Financial Services Ltd.,Niftymidsmall Financailservice
+MCX,Multi Commodity Exchange of India Ltd.,Niftymidsmall Financailservice
+MUTHOOTFIN,Muthoot Finance Ltd.,Niftymidsmall Financailservice
+PAYTM,One 97 Communications Ltd.,Niftymidsmall Financailservice
+POLICYBZR,PB Fintech Ltd.,Niftymidsmall Financailservice
+PEL,Piramal Enterprises Ltd.,Niftymidsmall Financailservice
+POONAWALLA,Poonawalla Fincorp Ltd.,Niftymidsmall Financailservice
+RBLBANK,RBL Bank Ltd.,Niftymidsmall Financailservice
+SBICARD,SBI Cards and Payment Services Ltd.,Niftymidsmall Financailservice
+SUNDARMFIN,Sundaram Finance Ltd.,Niftymidsmall Financailservice
+UNIONBANK,Union Bank of India,Niftymidsmall Financailservice
+YESBANK,Yes Bank Ltd.,Niftymidsmall Financailservice

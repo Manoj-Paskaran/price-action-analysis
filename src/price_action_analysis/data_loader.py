@@ -9,9 +9,8 @@ import streamlit as st
 import yfinance as yf
 from scipy import stats
 
+from .config import DATA_DIR
 from .constants import MONTHS
-
-DATA_DIR = Path(__file__).parent.joinpath(Path("../data/"))
 
 
 def get_cache_path_for_sector(sector: str) -> Path:

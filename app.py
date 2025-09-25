@@ -120,7 +120,7 @@ with tab1:
     formatted_table = get_formatted_table(data)
     st.dataframe(formatted_table)
 
-    col1, col2 = st.columns([1, 6])
+    col1, col2 = st.columns([1, 5])
     with col1:
         st.download_button(
             "Download CSV",
