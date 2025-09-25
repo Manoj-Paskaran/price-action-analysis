@@ -1,3 +1,5 @@
+from calendar import month_name
+
 import plotly.express as px
 
 from .constants import MONTHS
@@ -6,6 +8,7 @@ from .data_loader import (
     get_monthly_analysis,
     get_sector_monthly_analysis,
 )
+from .index_analyzer import get_top_performers
 
 
 def generate_heatmap(
@@ -95,7 +98,7 @@ def generate_sector_heatmap(
     fig.update_xaxes(title="")
     fig.update_yaxes(title="Year")
     fig.update_layout(
-        title=f"Sector Average Monthly Returns – {sector}",
+        title=f"Sector Average Monthly Returns - {sector}",
         coloraxis_colorbar_ticksuffix="%",
     )
     return fig
@@ -129,5 +132,26 @@ def generate_sector_monthly_avg_barchart(
         color=monthly_avg.values,
         color_continuous_scale="RdYlGn",
         text=[f"{v:.2f}%" for v in monthly_avg.values],
+    )
+    return fig
+
+
+def generate_top_performers_barchart(
+    index: str,
+    month_num: int,
+    min_year: int = 1900,
+    max_year: int = 2100,
+):
+    top_performers = get_top_performers(
+        index, month_num, min_year=min_year, max_year=max_year, index_df=None
+    )
+
+    fig = px.bar(
+        top_performers,
+        labels={"index": "Year", "value": "Number of times as Top Performer"},
+        title=f"Top Performing Stocks in {month_name[month_num]} - Index: {index}",
+        color=top_performers.values,
+        color_continuous_scale="RdYlGn",
+        text=top_performers.values,
     )
     return fig

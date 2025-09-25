@@ -9,22 +9,19 @@ import streamlit as st
 import yfinance as yf
 from scipy import stats
 
-from .config import DATA_DIR
+from .config import SECTOR_DIR, STOCK_METADATA
 from .constants import MONTHS
 
 
 def get_cache_path_for_sector(sector: str) -> Path:
-    sector_dir = DATA_DIR / "sector-analysis"
-    sector_dir.mkdir(parents=True, exist_ok=True)
+    SECTOR_DIR.mkdir(parents=True, exist_ok=True)
     safe_sector_name = re.sub(r"[^A-Za-z0-9_-]+", "_", sector.strip())
 
-    return sector_dir / f"{safe_sector_name}.parquet"
+    return SECTOR_DIR / f"{safe_sector_name}.parquet"
 
 
 def load_stock_metadata() -> pd.DataFrame:
-    return pd.read_parquet(
-        DATA_DIR.joinpath("combined.parquet"), engine="pyarrow", dtype_backend="pyarrow"
-    )
+    return pd.read_parquet(STOCK_METADATA, engine="pyarrow", dtype_backend="pyarrow")
 
 
 def download_closing_data(ticker: str) -> pd.Series:
@@ -263,6 +260,7 @@ def df_to_excel_bytes(df: pd.DataFrame) -> bytes:
     with pd.ExcelWriter(buf, engine="xlsxwriter") as writer:
         df.to_excel(writer, sheet_name="Analysis", index=True)
     return buf.getvalue()
+
 
 if __name__ == "__main__":
     import sys
