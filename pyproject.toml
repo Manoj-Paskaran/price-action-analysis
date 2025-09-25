@@ -12,3 +12,10 @@ dependencies = [
     "streamlit[charts]>=1.48.0",
     "yfinance>=0.2.65",
 ]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
