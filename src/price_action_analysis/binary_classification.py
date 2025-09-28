@@ -5,23 +5,15 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix
 import joblib
 import sys
-import os
 
 from price_action_analysis.constants import MONTHS
 
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-sys.path.append(PROJECT_ROOT)
+def prepare_classification_data(df: pd.DataFrame) -> pd.DataFrame:
 
-SRC_ROOT = os.path.join(PROJECT_ROOT, "src")
-sys.path.append(SRC_ROOT)
-
-from pages.monthly_analysis import get_sector_monthly_analysis
-
-def prepare_classification_data(sector: str) -> pd.DataFrame:
-    sector_analysis = get_sector_monthly_analysis(sector)
-
-    # melt into long form
-    df = sector_analysis.reset_index().melt(
+    # Ensure index is named 'year' and reset
+    if df.index.name != "year":
+        df.index.name = "year"
+    df = df.reset_index().melt(
         id_vars="year", var_name="month", value_name="return"
     )
     df = df.dropna(subset=["return"])
@@ -58,26 +50,33 @@ def train_classifier(df: pd.DataFrame, sector: str):
         clf.fit(X_train, y_train)
         y_pred = clf.predict(X_test)
 
-        print(f"\nFold {fold} Results for sector {sector}:")
-        print(classification_report(y_test, y_pred, digits=3))
-        print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
-
     # save final model on all data
     final_model = LogisticRegression(random_state=42, max_iter=1000)
     final_model.fit(X, y)
-    joblib.dump(final_model, f"{sector}_binary_classifier.pkl")
+
+    # print_up_down(sector)
+    print_monthly_max_up_down(sector)
 
     return final_model
 
 
-if __name__ == "__main__":
-    import sys
+def print_monthly_max_up_down(df: pd.DataFrame):
 
-    if len(sys.argv) < 2:
-        print("Usage: python -m src.price_action_analysis.binary_classification <sector_name>")
-        sys.exit(1)
+    # Ensure index is named 'year' and reset
+    if df.index.name != "year":
+        df.index.name = "year"
+    df = df.reset_index().melt(
+        id_vars="year", var_name="month", value_name="return"
+    )
+    df = df.dropna(subset=["return"])
 
-    sector = sys.argv[1]
-    df = prepare_classification_data(sector)
-    model = train_classifier(df, sector)
-    print(f"Model saved as {sector}_binary_classifier.pkl")
+    # label each month as Up or Down
+    df["direction"] = df["return"].apply(lambda r: "Up" if r > 0 else "Down")
+
+    # group by month across all years and count Up vs Down
+    counts = df.groupby("month")["direction"].value_counts().unstack(fill_value=0)
+
+    # decide majority direction for each month
+    majority = counts.apply(lambda row: "Up" if row.get("Up", 0) > row.get("Down", 0) else "Down", axis=1)
+
+    return majority
