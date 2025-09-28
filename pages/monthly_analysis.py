@@ -4,6 +4,8 @@ from datetime import datetime, timezone
 import pandas as pd
 import streamlit as st
 
+from price_action_analysis.binary_classification import print_monthly_max_up_down
+from price_action_analysis.constants import MONTHS
 from price_action_analysis.data_loader import (
     df_to_csv_bytes,
     df_to_excel_bytes,
@@ -113,7 +115,7 @@ data = data.filter(
     items=[str(y) for y in range(selected_min_year, selected_max_year + 1)], axis=0
 )
 tab1, tab2, tab3, tab4 = st.tabs(
-    ["📄 Price Action Data", "🔥 Heatmap", "📊 Bar Chart", "📊 Stat Test"]
+    ["📄 Price Action Data", "🔥 Heatmap", "📊 Bar Chart", "📊 Logistic Regression"]
 )
 
 with tab1:
@@ -178,12 +180,14 @@ with tab3:
     st.plotly_chart(fig, use_container_width=True, config={"scrollZoom": False})
 
 with tab4:
-    st.subheader("Monthly Hypothesis Testing at 95% Confidence Interval")
+    st.subheader("Logistic Regression Results")
 
-    results_dict = monthly_hypothesis_results(data)
-    results_df = pd.DataFrame(
-        list(results_dict.items()), columns=["Month", "Hypothesis Test Result"]
-    )
+    results = print_monthly_max_up_down(data)
+    # If results is a Series, convert to DataFrame for display
+    if isinstance(results, pd.Series):
+        results_df = results.loc[MONTHS].to_frame(name="Majority Direction")
+    else:
+        results_df = results.loc[MONTHS]
     st.dataframe(results_df)
 
 if selected_ticker == "SECTOR":
