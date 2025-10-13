@@ -1,5 +1,7 @@
 from calendar import month_name
 
+import numpy as np
+import pandas as pd
 import plotly.express as px
 
 from .constants import MONTHS
@@ -89,7 +91,7 @@ def generate_sector_heatmap(
 
     fig = px.imshow(
         filtered,
-        color_continuous_scale="RdYlGn",
+        color_continuous_scale=px.colors.diverging.RdYlGn,
         origin="upper",
         aspect="auto",
         text_auto=".2f",  # type: ignore
@@ -155,3 +157,49 @@ def generate_top_performers_barchart(
         text=top_performers.values,
     )
     return fig
+
+
+def generate_stock_treemap(index_stock_data: pd.DataFrame):
+    index_stock_data = index_stock_data.assign(
+        symbol=lambda df: df["symbol"].str.removesuffix(".NS"),
+        market_cap=lambda df: pd.to_numeric(df["market_cap"], errors="coerce"),
+        returns_pct=lambda df: pd.to_numeric(df["returns"].mul(100), errors="coerce"),
+    ).fillna({"market_cap": 0.0, "returns_pct": 0.0})[
+        ["company_name", "symbol", "industry", "market_cap", "returns_pct"]
+    ]
+
+    max_abs_return = float(np.nanmax(np.abs(index_stock_data["returns_pct"])))
+    color_range = (-max_abs_return, max_abs_return)
+
+    treemap = px.treemap(
+        index_stock_data,
+        path=[px.Constant("Nifty 50"), "industry", "symbol"],
+        values="market_cap",
+        color="returns_pct",
+        hover_data={
+            "company_name": True,
+            "market_cap": ":,.0f",
+            "returns_pct": ":.2f",
+        },
+        color_continuous_scale=px.colors.diverging.RdYlGn,
+        color_continuous_midpoint=0,
+        range_color=color_range,
+        custom_data=["returns_pct"],
+    )
+
+    treemap.update_traces(
+        texttemplate="<b>%{label}</b><br>%{customdata[0]:.2f}%",
+        selector=dict(type="treemap"),
+        textfont=dict(size=20, family="Segoe UI"),
+    )
+
+    treemap.update_layout(
+        margin=dict(t=0, l=0, r=0, b=0),
+        font=dict(size=18, family="Segoe UI"),
+        coloraxis_colorbar=dict(
+            title="Returns %",
+            ticksuffix="%",
+            tickfont=dict(size=12),
+        ),
+    )
+    return treemap

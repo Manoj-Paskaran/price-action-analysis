@@ -221,6 +221,56 @@ def get_formatted_table(analysis: pd.DataFrame):
     )
 
 
+async def get_index_heatmap_data(index_data_csv: str | Path):
+
+    async def get_stock_data(ticker: str) -> pd.Series:
+
+        def fetch() -> pd.Series:
+            info = yf.Ticker(ticker).get_fast_info()
+            last_price = info.get("lastPrice")
+            open_price = info.get("open")
+            market_cap = info.get("marketCap")
+
+            returns = np.nan
+            if last_price is not None and open_price not in (None, 0):
+                returns = last_price / open_price - 1
+
+            return pd.Series(
+                {
+                    "symbol": ticker,
+                    "market_cap": market_cap,
+                    "returns": returns,
+                }
+            )
+
+        return await asyncio.to_thread(fetch)
+
+    index_df = pd.read_csv(index_data_csv, engine="pyarrow", dtype_backend="pyarrow")
+
+    tickers = index_df["symbol"].to_list()
+    tasks = [get_stock_data(ticker) for ticker in tickers]
+    results = await asyncio.gather(*tasks)
+
+    series_list: list[pd.Series] = []
+    for result in results:
+        series_list.append(result)
+
+    stock_metrics = (
+        pd.DataFrame(series_list)
+        .drop_duplicates(subset="symbol", keep="last")
+        .set_index("symbol")
+    )
+
+    index_stock_data = (
+        index_df.merge(
+            stock_metrics[["market_cap", "returns"]],
+            left_on="symbol",
+            right_index=True,
+            how="left",
+        )
+    )
+    return index_stock_data
+
 # hypothesis testing for each month
 def monthly_hypothesis_results(returns_df):
     # returns_df: df with years as rows, months as columns, monthly returns as values

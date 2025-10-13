@@ -9,6 +9,7 @@ STOCK_METADATA = DATA_DIR / "combined.parquet"
 
 INDEX_CSV = INDEX_DIR / "nifty_sectoral_indices.csv"
 
+NIFTY_50_CSV = INDEX_DIR / "nifty_50.csv"
 
 if __name__ == "__main__":
     print(f"PROJECT_ROOT: {PROJECT_ROOT}")
