@@ -221,19 +221,27 @@ def get_formatted_table(analysis: pd.DataFrame):
     )
 
 
-async def get_index_heatmap_data(index_data_csv: str | Path):
-
+async def get_index_heatmap_data(
+    index_data_csv: str | Path, interval: str = "1d"
+) -> pd.DataFrame:
     async def get_stock_data(ticker: str) -> pd.Series:
+        def get_returns(interval: str, info) -> float:  # type: ignore
+            if interval == "1d":
+                try:
+                    return info.get("lastPrice") / info.get("previousClose") - 1  # type: ignore
+                except Exception as e:
+                    print(f"Error calculating 1d returns for {ticker}: {e}")
+                    return np.nan
+            elif interval == "1h":
+                raise NotImplementedError("1h interval not implemented yet")
+            elif interval == "4h":
+                raise NotImplementedError("4h interval not implemented yet")
 
         def fetch() -> pd.Series:
             info = yf.Ticker(ticker).get_fast_info()
-            last_price = info.get("lastPrice")
-            open_price = info.get("open")
             market_cap = info.get("marketCap")
 
-            returns = np.nan
-            if last_price is not None and open_price not in (None, 0):
-                returns = last_price / open_price - 1
+            returns = get_returns("1d", info)
 
             return pd.Series(
                 {
@@ -261,15 +269,14 @@ async def get_index_heatmap_data(index_data_csv: str | Path):
         .set_index("symbol")
     )
 
-    index_stock_data = (
-        index_df.merge(
-            stock_metrics[["market_cap", "returns"]],
-            left_on="symbol",
-            right_index=True,
-            how="left",
-        )
+    index_stock_data = index_df.merge(
+        stock_metrics[["market_cap", "returns"]],
+        left_on="symbol",
+        right_index=True,
+        how="left",
     )
     return index_stock_data
+
 
 # hypothesis testing for each month
 def monthly_hypothesis_results(returns_df):

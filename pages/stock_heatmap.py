@@ -9,8 +9,9 @@ from price_action_analysis.plots import generate_stock_treemap
 st.set_page_config(layout="wide")
 
 st.title("Nifty 50 Stock Heatmap")
+
 with st.spinner("Loading data..."):
-    @st.cache_data
+
     def load_index_stock_data(csv_path):
         return asyncio.run(get_index_heatmap_data(csv_path))
 
