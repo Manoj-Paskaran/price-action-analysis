@@ -1,4 +1,3 @@
-
 from datetime import datetime, timezone
 
 import pandas as pd
@@ -14,7 +13,6 @@ from price_action_analysis.data_loader import (
     get_monthly_analysis,
     get_sector_monthly_analysis,
     load_stock_metadata,
-    monthly_hypothesis_results,
 )
 from price_action_analysis.plots import (
     generate_heatmap,
@@ -161,7 +159,7 @@ with tab2:
         height=600,
         font=dict(size=20),
     )
-    st.plotly_chart(fig, use_container_width=True, config={"scrollZoom": False})
+    st.plotly_chart(fig, width="stretch", config={"scrollZoom": False})
 
 with tab3:
     st.subheader("Bar Chart")
@@ -177,7 +175,7 @@ with tab3:
             min_year=selected_min_year,
             max_year=selected_max_year,
         )
-    st.plotly_chart(fig, use_container_width=True, config={"scrollZoom": False})
+    st.plotly_chart(fig, width="stretch", config={"scrollZoom": False})
 
 with tab4:
     st.subheader("Logistic Regression Results")

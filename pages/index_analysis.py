@@ -26,4 +26,7 @@ st.write(f"### Selected Month: **{selected_month_name}**")
 month_num = month_names.index(selected_month_name) + 1
 
 fig = generate_top_performers_barchart(selected_index, month_num)
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(
+    fig,
+    width="stretch",
+)

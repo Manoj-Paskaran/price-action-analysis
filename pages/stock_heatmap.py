@@ -18,4 +18,4 @@ with st.spinner("Loading data..."):
     index_stock_data = load_index_stock_data(NIFTY_50_CSV)
 
 fig = generate_stock_treemap(index_stock_data)
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig, width="stretch")
