@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import yfinance as yf
-from scipy import stats
 
 from .config import SECTOR_DIR, STOCK_METADATA
 from .constants import MONTHS
@@ -276,36 +275,6 @@ async def get_index_heatmap_data(
         how="left",
     )
     return index_stock_data
-
-
-# hypothesis testing for each month
-def monthly_hypothesis_results(returns_df):
-    # returns_df: df with years as rows, months as columns, monthly returns as values
-    results = {}
-    months = [
-        col
-        for col in returns_df.columns
-        if col not in ["annual_returns", "first_half_avg", "second_half_avg"]
-    ]
-
-    for month in months:
-        data = returns_df[month].dropna().values
-        if len(data) == 0:
-            results[month] = "No Data"
-            continue
-
-        # calculated one-sample t-test against 0
-        t_stat, p_val = stats.ttest_1samp(data, 0.0)
-        mean = np.mean(data)
-        # Checking significance at 95% CI
-        if p_val < 0.05:  # type: ignore
-            if mean > 0:
-                results[month] = "Up"
-            else:
-                results[month] = "Down"
-        else:
-            results[month] = "Cannot Conclude @95% CI"
-    return results
 
 
 def df_to_csv_bytes(df: pd.DataFrame) -> bytes:

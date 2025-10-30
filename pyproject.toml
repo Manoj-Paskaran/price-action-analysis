@@ -3,13 +3,9 @@ name = "price-action-analysis"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies= [
-    "ipykernel>=6.30.1",
-    "kaleido>=1.0.0",
-    "nbformat>=5.10.4",
     "pandas[excel]>=2.3.1",
     "plotly>=6.2.0",
     "scikit-learn>=1.7.2",
-    "scipy>=1.16.1",
     "streamlit[charts]>=1.48.0",
     "yfinance>=0.2.65",
 ]
@@ -25,3 +21,9 @@ package-dir = {"" = "src"}
 where = ["src"]
 include = ["price_action_analysis*"]
 exclude = ["tests*", "sandbox*"]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.1.0",
+    "nbformat>=5.10.4",
+]
