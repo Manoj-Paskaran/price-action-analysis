@@ -26,9 +26,24 @@ def generate_heatmap(
         .round(2)
     )
 
+    diverging_scale = [(0.0, "#b22222"), (0.5, "#fffdd0"), (1.0, "#006400")]
+
+    values = monthly.to_numpy(dtype=float)
+    abs_values = np.abs(values)
+    abs_values = abs_values[np.isfinite(abs_values)]
+    if abs_values.size:
+        max_abs = float(np.quantile(abs_values, 0.95))
+    else:
+        max_abs = 100.0
+    if not np.isfinite(max_abs) or max_abs <= 0:
+        max_abs = 100.0
+
     fig = px.imshow(
         monthly,
-        color_continuous_scale="RdYlGn",
+        color_continuous_scale=diverging_scale,
+        color_continuous_midpoint=0,
+        zmin=-max_abs,
+        zmax=max_abs,
         origin="upper",
         aspect="auto",
         text_auto=".2f",  # type: ignore
@@ -85,13 +100,29 @@ def generate_sector_heatmap(
         sector_df.filter(
             items=[str(y) for y in range(min_year, max_year + 1)], axis="index"
         )
+        .loc[:, MONTHS]
         .mul(100)
         .round(2)
     )
 
+    diverging_scale = [(0.0, "#b22222"), (0.5, "#fffdd0"), (1.0, "#006400")]
+
+    values = filtered.to_numpy(dtype=float)
+    abs_values = np.abs(values)
+    abs_values = abs_values[np.isfinite(abs_values)]
+    if abs_values.size:
+        max_abs = float(np.quantile(abs_values, 0.95))
+    else:
+        max_abs = 100.0
+    if not np.isfinite(max_abs) or max_abs <= 0:
+        max_abs = 100.0
+
     fig = px.imshow(
         filtered,
-        color_continuous_scale=px.colors.diverging.RdYlGn,
+        color_continuous_scale=diverging_scale,
+        color_continuous_midpoint=0,
+        zmin=-max_abs,
+        zmax=max_abs,
         origin="upper",
         aspect="auto",
         text_auto=".2f",  # type: ignore
