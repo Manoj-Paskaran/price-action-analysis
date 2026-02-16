@@ -224,7 +224,8 @@ async def get_index_heatmap_data(
     index_data_csv: str | Path, interval: str = "1d"
 ) -> pd.DataFrame:
     async def get_stock_data(ticker: str) -> pd.Series:
-        def get_returns(interval: str, info) -> float:  # type: ignore
+        
+        def get_returns(info, interval) -> float : # type: ignore
             if interval == "1d":
                 try:
                     return info.get("lastPrice") / info.get("previousClose") - 1  # type: ignore
@@ -237,18 +238,29 @@ async def get_index_heatmap_data(
                 raise NotImplementedError("4h interval not implemented yet")
 
         def fetch() -> pd.Series:
-            info = yf.Ticker(ticker).get_fast_info()
-            market_cap = info.get("marketCap")
+            try:
+                info = yf.Ticker(ticker).fast_info
+                market_cap = info.get("marketCap")
 
-            returns = get_returns("1d", info)
+                returns = get_returns(info, interval="1d")
 
-            return pd.Series(
-                {
-                    "symbol": ticker,
-                    "market_cap": market_cap,
-                    "returns": returns,
-                }
-            )
+                return pd.Series(
+                    {
+                        "symbol": ticker,
+                        "market_cap": market_cap,
+                        "returns": returns,
+                    }
+                )
+
+            except Exception as e:
+                print(f"Error fetching data for {ticker}: {e}")
+                return pd.Series(
+                    {
+                        "symbol": ticker,
+                        "market_cap": pd.NA,
+                        "returns": pd.NA,
+                    }
+                )
 
         return await asyncio.to_thread(fetch)
 
