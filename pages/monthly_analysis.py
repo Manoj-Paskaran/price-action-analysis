@@ -21,75 +21,106 @@ from price_action_analysis.plots import (
     generate_sector_monthly_avg_barchart,
 )
 
+market = st.sidebar.selectbox(
+    "Choose :", ["NASDAQ-100", "S&P 500", "DJIA", "NSE"], index=0
+)
 st.set_page_config(layout="wide")
 
-stock_df = load_stock_metadata()
+if market == "DJIA":
+    ticker_df = pd.read_csv("data/us-indices/ranked_djia.csv")
+elif market == "S&P 500":
+    ticker_df = pd.read_csv("data/us-indices/ranked_sp500.csv")
+elif market == "NASDAQ-100":
+    ticker_df = pd.read_csv("data/us-indices/ranked_nasdaq100.csv")
+elif market == "NSE":
+    ticker_df = load_stock_metadata()
+    sector_names = sorted(ticker_df["sector"].dropna().unique().tolist())
+    sector_names.insert(0, "All Sectors")
 
-sector_names = sorted(stock_df["sector"].dropna().unique().tolist())
-sector_names.insert(0, "All Sectors")
+if market == "NSE":
+    selected_sector = st.sidebar.selectbox("Choose a sector:", sector_names, index=1)
+    if selected_sector == "All Sectors":
+        sector_df = ticker_df
+    elif selected_sector != "All Sectors":
+        sector_df = ticker_df.query("sector == @selected_sector")
 
-selected_sector = st.sidebar.selectbox("Choose a sector:", sector_names, index=1)
+    filtered_ticker_df = sector_df["company_name"].tolist()
 
-if selected_sector == "All Sectors":
-    sector_df = stock_df
-elif selected_sector != "All Sectors":
-    sector_df = stock_df.query("sector == @selected_sector")
+    if selected_sector != "All Sectors":
+        filtered_ticker_df.insert(0, "Entire Sector")
 
-stock_names = sector_df["company_name"].tolist()
+    selected_ticker: str = st.sidebar.selectbox(
+        "Choose a stock:", filtered_ticker_df, index=0
+    )  # type: ignore
 
-if selected_sector != "All Sectors":
-    stock_names.insert(0, "Entire Sector")
-
-selected_stock_name = st.sidebar.selectbox("Choose a stock:", stock_names, index=0)
+if market in ["DJIA", "S&P 500", "NASDAQ-100"]:
+    ticker_df["display_name"] = ticker_df.apply(
+        lambda row: f"{row['company_name']} ({row['ticker']})", axis=1
+    )
+    selected_display_name = st.sidebar.selectbox(
+        "Choose a stock:",
+        ticker_df["display_name"].tolist(),
+        index=0,
+    )
+    # selected_ticker = ticker_df.set_index("display_name").loc[selected_display_name][
+    #     "ticker"
+    # ]
+    selected_ticker = ticker_df.query("display_name == @selected_display_name")[
+        "ticker"
+    ].iloc[0]
 
 st.title("Price Action Dashboard")
 
 selected_ticker: str
-if selected_stock_name == "Entire Sector":
-    selected_ticker = "SECTOR"  # type: ignore
-    st.write(f"### Selected Sector: **{selected_sector}**")
-else:
-    selected_ticker = sector_df.set_index("company_name")["symbol"].get(
-        selected_stock_name
-    )  # type: ignore
-    st.write(f"### Selected Stock: **{selected_stock_name}** `{selected_ticker}`")
-
-
-if selected_ticker == "SECTOR":
-    cache_caption = st.empty()
-    force_refresh = False  # will render at bottom
-
-    cache_path = get_cache_path_for_sector(str(selected_sector))  # type: ignore
-
-    def _format_age(delta_seconds: float) -> str:
-        if delta_seconds < 60:
-            return "just now"
-        if delta_seconds < 3600:
-            mins = int(delta_seconds // 60)
-            return f"{mins} min{'s' if mins != 1 else ''} ago"
-        if delta_seconds < 86400:
-            hours = delta_seconds / 3600
-            return f"{hours:.1f} h ago"
-        days = delta_seconds / 86400
-        return f"{days:.1f} d ago"
-
-    if cache_path.exists():
-        age = datetime.now(timezone.utc).timestamp() - cache_path.stat().st_mtime
-        cache_caption.caption(f"Last updated: {_format_age(age)}")
+if market == "NSE":
+    if selected_ticker == "Entire Sector":
+        selected_ticker = "SECTOR"  # type: ignore
+        st.write(f"### Selected Sector: **{selected_sector}**")
     else:
-        cache_caption.caption("No cached sector data yet.")
+        selected_ticker = sector_df.set_index("company_name")["symbol"].get(
+            selected_ticker
+        )  # type: ignore
+        st.write(f"### Selected Stock: **{selected_ticker}** `{selected_ticker}`")
 
-    with st.spinner("Loading sector analysis (cached if available)..."):
-        assert isinstance(selected_sector, str)
-        data = get_sector_monthly_analysis(
-            selected_sector, stock_df=stock_df, force_refresh=False
-        )
+    if selected_ticker == "SECTOR":
+        cache_caption = st.empty()
+        force_refresh = False  # will render at bottom
 
-    if cache_path.exists():
-        age = datetime.now(timezone.utc).timestamp() - cache_path.stat().st_mtime
-        cache_caption.caption(f"Last updated: {_format_age(age)}")
+        cache_path = get_cache_path_for_sector(str(selected_sector))  # type: ignore
 
-elif selected_ticker != "SECTOR":
+        def _format_age(delta_seconds: float) -> str:
+            if delta_seconds < 60:
+                return "just now"
+            if delta_seconds < 3600:
+                mins = int(delta_seconds // 60)
+                return f"{mins} min{'s' if mins != 1 else ''} ago"
+            if delta_seconds < 86400:
+                hours = delta_seconds / 3600
+                return f"{hours:.1f} h ago"
+            days = delta_seconds / 86400
+            return f"{days:.1f} d ago"
+
+        if cache_path.exists():
+            age = datetime.now(timezone.utc).timestamp() - cache_path.stat().st_mtime
+            cache_caption.caption(f"Last updated: {_format_age(age)}")
+        else:
+            cache_caption.caption("No cached sector data yet.")
+
+        with st.spinner("Loading sector analysis (cached if available)..."):
+            assert isinstance(selected_sector, str)
+            data = get_sector_monthly_analysis(
+                selected_sector, stock_df=ticker_df, force_refresh=False
+            )
+
+        if cache_path.exists():
+            age = datetime.now(timezone.utc).timestamp() - cache_path.stat().st_mtime
+            cache_caption.caption(f"Last updated: {_format_age(age)}")
+
+    elif selected_ticker != "SECTOR":
+        data = get_monthly_analysis(selected_ticker)  # type: ignore
+
+elif market in ["DJIA", "S&P 500", "NASDAQ-100"]:
+    st.write(f"### Selected Stock: **{selected_ticker}** `{selected_ticker}`")
     data = get_monthly_analysis(selected_ticker)  # type: ignore
 
 min_year, max_year = data.index.min(), data.index.max()
@@ -176,6 +207,7 @@ with tab3:
             max_year=selected_max_year,
         )
     st.plotly_chart(fig, width="stretch", config={"scrollZoom": False})
+
 
 with tab4:
     st.subheader("Logistic Regression Results")

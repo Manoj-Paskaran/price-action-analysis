@@ -3,7 +3,8 @@ name = "price-action-analysis"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies= [
-    "pandas[excel]>=2.3.1",
+    "httpx>=0.28.1",
+    "pandas[excel,html]>=2.3.1",
     "plotly>=6.2.0",
     "scikit-learn>=1.7.2",
     "streamlit[charts]>=1.48.0",
